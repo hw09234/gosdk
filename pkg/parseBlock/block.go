@@ -15,7 +15,7 @@ import (
 	"github.com/hyperledger/fabric-protos-go/ledger/rwset"
 	"github.com/hyperledger/fabric-protos-go/ledger/rwset/kvrwset"
 	pbmsp "github.com/hyperledger/fabric-protos-go/msp"
-	ab "github.com/hyperledger/fabric-protos-go/orderer"
+//	ab "github.com/hyperledger/fabric-protos-go/orderer"
 	"github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/hyperledger/fabric-protos-go/peer/lifecycle"
 	"github.com/hyperledger/fabric/common/flogging"
@@ -144,18 +144,18 @@ func getValueFromBlockMetadata(block *cb.Block, index cb.BlockMetadataIndex) []b
 		b := make([]byte, 8)
 		binary.LittleEndian.PutUint64(b, lastConfig.Index)
 		return b
-	} else if index == cb.BlockMetadataIndex_ORDERER {
-		if err := proto.Unmarshal(block.Metadata.Metadata[index], valueMetadata); err != nil {
-			return nil
-		}
-
-		kafkaMetadata := &ab.KafkaMetadata{}
-		if err := proto.Unmarshal(valueMetadata.Value, kafkaMetadata); err != nil {
-			return nil
-		}
-		b := make([]byte, 8)
-		binary.LittleEndian.PutUint64(b, uint64(kafkaMetadata.LastOffsetPersisted))
-		return b
+	//} else if index == cb.BlockMetadataIndex_ORDERER {
+	//	if err := proto.Unmarshal(block.Metadata.Metadata[index], valueMetadata); err != nil {
+	//		return nil
+	//	}
+	//
+	//	kafkaMetadata := &ab.KafkaMetadata{}
+	//	if err := proto.Unmarshal(valueMetadata.Value, kafkaMetadata); err != nil {
+	//		return nil
+	//	}
+	//	b := make([]byte, 8)
+	//	binary.LittleEndian.PutUint64(b, uint64(kafkaMetadata.LastOffsetPersisted))
+	//	return b
 	} else if index == cb.BlockMetadataIndex_TRANSACTIONS_FILTER {
 		return block.Metadata.Metadata[index]
 	}

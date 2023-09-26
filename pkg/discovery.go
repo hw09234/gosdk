@@ -8,6 +8,7 @@ import (
 	"github.com/hyperledger/fabric-protos-go/discovery"
 	"github.com/hyperledger/fabric-protos-go/gossip"
 	"github.com/hyperledger/fabric-protos-go/msp"
+	"github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/hyperledger/fabric/gossip/protoext"
 	utils "github.com/hyperledger/fabric/protoutil"
 	"github.com/pkg/errors"
@@ -109,7 +110,7 @@ func channelPeerRequest(channel, mspID string, chaincodes []string, collections 
 	q.Channel = channel
 	q.Query = &discovery.Query_PeerQuery{
 		PeerQuery: &discovery.PeerMembershipQuery{
-			Filter: &discovery.ChaincodeInterest{},
+			Filter: &peer.ChaincodeInterest{},
 		},
 	}
 	req.Queries = append(req.Queries, &q)
@@ -176,16 +177,16 @@ func endorsePolicyRequest(channel, mspID string, chaincodes []string, collection
 		return nil, errors.WithMessage(err, "parse chaincode and collection failed")
 	}
 
-	var ccCalls []*discovery.ChaincodeCall
+	var ccCalls []*peer.ChaincodeCall
 	for _, cc := range *ccAndCol.Chaincodes {
-		ccCalls = append(ccCalls, &discovery.ChaincodeCall{
+		ccCalls = append(ccCalls, &peer.ChaincodeCall{
 			Name:            cc,
 			CollectionNames: cc2collections[cc],
 		})
 	}
 
-	var ccInterest []*discovery.ChaincodeInterest
-	ccInterest = append(ccInterest, &discovery.ChaincodeInterest{Chaincodes: ccCalls})
+	var ccInterest []*peer.ChaincodeInterest
+	ccInterest = append(ccInterest, &peer.ChaincodeInterest{Chaincodes: ccCalls})
 
 	q.Channel = channel
 	q.Query = &discovery.Query_CcQuery{
