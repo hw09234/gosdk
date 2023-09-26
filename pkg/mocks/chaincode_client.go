@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	gohfc "github.com/hw09234/gohfc/pkg"
+	gosdk "github.com/hw09234/gosdk/pkg"
 	mock "github.com/stretchr/testify/mock"
 
 	peer "github.com/hyperledger/fabric-protos-go/peer"
@@ -15,11 +15,11 @@ type ChaincodeClient struct {
 }
 
 // AddUser provides a mock function with given fields: userName, userConfig
-func (_m *ChaincodeClient) AddUser(userName string, userConfig gohfc.UserConfig) error {
+func (_m *ChaincodeClient) AddUser(userName string, userConfig gosdk.UserConfig) error {
 	ret := _m.Called(userName, userConfig)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(string, gohfc.UserConfig) error); ok {
+	if rf, ok := ret.Get(0).(func(string, gosdk.UserConfig) error); ok {
 		r0 = rf(userName, userConfig)
 	} else {
 		r0 = ret.Error(0)
@@ -43,15 +43,15 @@ func (_m *ChaincodeClient) Close() error {
 }
 
 // GetCrypto provides a mock function with given fields:
-func (_m *ChaincodeClient) GetCrypto() (gohfc.CryptoSuite, error) {
+func (_m *ChaincodeClient) GetCrypto() (gosdk.CryptoSuite, error) {
 	ret := _m.Called()
 
-	var r0 gohfc.CryptoSuite
-	if rf, ok := ret.Get(0).(func() gohfc.CryptoSuite); ok {
+	var r0 gosdk.CryptoSuite
+	if rf, ok := ret.Get(0).(func() gosdk.CryptoSuite); ok {
 		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(gohfc.CryptoSuite)
+			r0 = ret.Get(0).(gosdk.CryptoSuite)
 		}
 	}
 
@@ -66,15 +66,15 @@ func (_m *ChaincodeClient) GetCrypto() (gohfc.CryptoSuite, error) {
 }
 
 // Invoke provides a mock function with given fields: args, transientMap, cName, ccName, userName
-func (_m *ChaincodeClient) Invoke(args []string, transientMap map[string][]byte, cName string, ccName string, userName string) (*gohfc.InvokeResponse, error) {
+func (_m *ChaincodeClient) Invoke(args []string, transientMap map[string][]byte, cName string, ccName string, userName string) (*gosdk.InvokeResponse, error) {
 	ret := _m.Called(args, transientMap, cName, ccName, userName)
 
-	var r0 *gohfc.InvokeResponse
-	if rf, ok := ret.Get(0).(func([]string, map[string][]byte, string, string, string) *gohfc.InvokeResponse); ok {
+	var r0 *gosdk.InvokeResponse
+	if rf, ok := ret.Get(0).(func([]string, map[string][]byte, string, string, string) *gosdk.InvokeResponse); ok {
 		r0 = rf(args, transientMap, cName, ccName, userName)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*gohfc.InvokeResponse)
+			r0 = ret.Get(0).(*gosdk.InvokeResponse)
 		}
 	}
 

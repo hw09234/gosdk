@@ -2,10 +2,10 @@
 Copyright: peerfintech. All Rights Reserved.
 */
 
-package gohfc
+package gosdk
 
 import (
-	pBlock "github.com/hw09234/gohfc/pkg/parseBlock"
+	pBlock "github.com/hw09234/gosdk/pkg/parseBlock"
 	"github.com/hyperledger/fabric-protos-go/common"
 	"github.com/hyperledger/fabric-protos-go/discovery"
 	"github.com/hyperledger/fabric-protos-go/orderer"

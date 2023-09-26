@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	gohfc "github.com/hw09234/gohfc/pkg"
-	pBlock "github.com/hw09234/gohfc/pkg/parseBlock"
+	gosdk "github.com/hw09234/gosdk/pkg"
+	pBlock "github.com/hw09234/gosdk/pkg/parseBlock"
 	"github.com/hyperledger/fabric-protos-go/common"
 	"github.com/hyperledger/fabric-protos-go/discovery"
 	"github.com/stretchr/testify/assert"
@@ -17,11 +17,11 @@ import (
 func TestV2E2ENonGM(t *testing.T) {
 	t.Log("Ready to new fabric client")
 	org1ClientConfig := newOrg1ClientConfig(t, "v2")
-	c1, err := gohfc.NewFabricClient(&org1ClientConfig, "")
+	c1, err := gosdk.NewFabricClient(&org1ClientConfig, "")
 	assert.Nil(t, err, "new org1 client failed")
 
 	org2ClientConfig := newOrg2ClientConfig(t, "v2")
-	c2, err := gohfc.NewFabricClient(&org2ClientConfig, "")
+	c2, err := gosdk.NewFabricClient(&org2ClientConfig, "")
 	assert.Nil(t, err, "new org2 client failed")
 
 	t.Run("deploy Fabric network and operate org1's node by fabric client", func(t *testing.T) {
@@ -31,10 +31,10 @@ func TestV2E2ENonGM(t *testing.T) {
 
 		// 打包chaincode
 		t.Log("Ready to package chaincode")
-		info := gohfc.ChaincodeInfo{
+		info := gosdk.ChaincodeInfo{
 			OutputFile: "mycc.tar.gz",
 			Path:       chaincodePathV2,
-			Type:       gohfc.ChaincodeSpec_GOLANG,
+			Type:       gosdk.ChaincodeSpec_GOLANG,
 			Label:      "myccv1",
 		}
 		err = c1.PackageChaincode(info)
@@ -94,7 +94,7 @@ func TestV2E2ENonGM(t *testing.T) {
 
 		// 组织批准
 		t.Log("Ready to approve chaincode")
-		acreq := gohfc.ApproveCommitRequest{
+		acreq := gosdk.ApproveCommitRequest{
 			ChannelName:         channelName,
 			ChaincodeName:       chaincodeName,
 			ChaincodeVserison:   "1.0",
@@ -117,7 +117,7 @@ func TestV2E2ENonGM(t *testing.T) {
 		assert.Equal(t, int64(1), appChaincode.Sequence)
 		assert.Equal(t, "mycc", appChaincode.Name)
 
-		acreq = gohfc.ApproveCommitRequest{
+		acreq = gosdk.ApproveCommitRequest{
 			ChannelName:         channelName,
 			ChaincodeName:       chaincodeName,
 			ChaincodeVserison:   "1.0",
@@ -148,7 +148,7 @@ func TestV2E2ENonGM(t *testing.T) {
 		assert.Equal(t, true, acc.InitRequired)
 
 		t.Log("Check org's commitreadiness")
-		req := gohfc.CheckCommitreadinessRequest{
+		req := gosdk.CheckCommitreadinessRequest{
 			ChannelName:       channelName,
 			ChaincodeName:     chaincodeName,
 			ChaincodeVserison: "1.0",
@@ -164,7 +164,7 @@ func TestV2E2ENonGM(t *testing.T) {
 
 		// 进行提交
 		t.Log("Ready to commit chaincode")
-		acreq = gohfc.ApproveCommitRequest{
+		acreq = gosdk.ApproveCommitRequest{
 			ChannelName:       channelName,
 			ChaincodeName:     chaincodeName,
 			ChaincodeVserison: "1.0",
@@ -185,7 +185,7 @@ func TestV2E2ENonGM(t *testing.T) {
 		assert.Equal(t, "mycc", commChaincode.Name)
 
 		t.Log("Ready to query committed chaincode")
-		input := gohfc.CommittedQueryInput{
+		input := gosdk.CommittedQueryInput{
 			ChannelID: channelName,
 		}
 		_, queryResult, err := c1.QueryCommitted(input)
@@ -239,7 +239,7 @@ func TestV2E2ENonGM(t *testing.T) {
 		blocksNum, err := recBlock(t, cb, nil, fullErr)
 		assert.Nil(t, err)
 		assert.Equal(t, 3, blocksNum)
-		fcb := make(chan gohfc.FilteredBlockResponse)
+		fcb := make(chan gosdk.FilteredBlockResponse)
 		filterErr := c1.ListenEventFilterBlock(channelName, 0, fcb)
 		blocksNum, err = recBlock(t, nil, fcb, filterErr)
 		assert.Nil(t, err)
@@ -250,7 +250,7 @@ func TestV2E2ENonGM(t *testing.T) {
 		dConfig := newDiscoveryConfig(t, "v2")
 
 		t.Log("Ready to new discovery client")
-		dc, err := gohfc.NewDiscoveryClient(dConfig)
+		dc, err := gosdk.NewDiscoveryClient(dConfig)
 		assert.Nil(t, err)
 
 		t.Logf("Ready to discovery channel %s peers", channelName)
@@ -368,7 +368,7 @@ func TestV2E2ENonGM(t *testing.T) {
 		lConfig := newLedgerConfig(t, "v2")
 
 		t.Log("Ready to new ledger client")
-		lc, err := gohfc.NewLedgerClient(lConfig)
+		lc, err := gosdk.NewLedgerClient(lConfig)
 		assert.Nil(t, err)
 
 		t.Log("Ready to get block height")
@@ -413,7 +413,7 @@ func TestV2E2ENonGM(t *testing.T) {
 		cConfig := newChaincodeClinetConfig(t, "v2")
 
 		t.Log("Ready to new chaincode client")
-		cc, err := gohfc.NewChaincodeClient(cConfig)
+		cc, err := gosdk.NewChaincodeClient(cConfig)
 		assert.Nil(t, err)
 
 		t.Log("Ready to add users")
@@ -453,7 +453,7 @@ func TestV2E2ENonGM(t *testing.T) {
 
 		cConfig.OConfigs = nil
 		t.Log("Ready to new chaincode client just for peer")
-		ccPeer, err := gohfc.NewChaincodeClient(cConfig)
+		ccPeer, err := gosdk.NewChaincodeClient(cConfig)
 		assert.Nil(t, err)
 
 		t.Log("Ready to query chaincode by ccPeer again")
@@ -475,13 +475,13 @@ func TestV2E2ENonGM(t *testing.T) {
 		eConfig := newEventConfig(t, "v2")
 
 		t.Log("Ready to new event client")
-		ec, err := gohfc.NewEventClient(eConfig)
+		ec, err := gosdk.NewEventClient(eConfig)
 		assert.Nil(t, err)
 		cb := make(chan pBlock.Block)
 		fullErr := ec.ListenEventFullBlock(0, cb)
 		assert.Nil(t, err)
 		assert.NotNil(t, cb)
-		fcb := make(chan gohfc.FilteredBlockResponse)
+		fcb := make(chan gosdk.FilteredBlockResponse)
 		filterErr := ec.ListenEventFilterBlock(0, fcb)
 		assert.Nil(t, err)
 		assert.NotNil(t, fcb)

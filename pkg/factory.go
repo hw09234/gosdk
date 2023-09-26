@@ -2,16 +2,16 @@
 Copyright: peerfintech. All Rights Reserved.
 */
 
-package gohfc
+package gosdk
 
 import (
-	"github.com/hw09234/gohfc/pkg/syncTxStatus"
+	"github.com/hw09234/gosdk/pkg/syncTxStatus"
 	"github.com/hyperledger/fabric/common/flogging"
 	"github.com/pkg/errors"
 	"time"
 )
 
-var logger = flogging.MustGetLogger("gohfc")
+var logger = flogging.MustGetLogger("gosdk")
 
 // NewFabricClient 根据结构体或者配置文件初始化Fabric句柄，包含所有的功能
 func NewFabricClient(clientConfig *ClientConfig, configFile string) (FabricClient, error) {

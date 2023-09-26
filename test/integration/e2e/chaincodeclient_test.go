@@ -6,11 +6,11 @@ import (
 	"testing"
 	"time"
 
-	gohfc "github.com/hw09234/gohfc/pkg"
+	gosdk "github.com/hw09234/gosdk/pkg"
 	"github.com/stretchr/testify/assert"
 )
 
-func newChaincodeClinetConfig(t *testing.T, version string) gohfc.ChaincodeConfig {
+func newChaincodeClinetConfig(t *testing.T, version string) gosdk.ChaincodeConfig {
 	var cryptoPath string
 
 	if version == "v2" {
@@ -37,29 +37,29 @@ func newChaincodeClinetConfig(t *testing.T, version string) gohfc.ChaincodeConfi
 	tlscert, err := ioutil.ReadFile(fmt.Sprintf("../../fixtures/%s/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt", cryptoPath))
 	assert.Nil(t, err, "read tls cert failed")
 
-	users := make(map[string]gohfc.UserConfig)
-	adminConfig := gohfc.UserConfig{
+	users := make(map[string]gosdk.UserConfig)
+	adminConfig := gosdk.UserConfig{
 		Cert:  adminIdentity,
 		Key:   adminKey,
 		MspID: "Org1MSP",
 	}
 	users["admin"] = adminConfig
-	userConfig := gohfc.UserConfig{
+	userConfig := gosdk.UserConfig{
 		Cert:  userIdentity,
 		Key:   userKey,
 		MspID: "Org1MSP",
 	}
 	users["user"] = userConfig
 
-	return gohfc.ChaincodeConfig{
+	return gosdk.ChaincodeConfig{
 		IsEnableSyncTx: true,
-		CryptoConfig: gohfc.CryptoConfig{
+		CryptoConfig: gosdk.CryptoConfig{
 			Family:    "ecdsa",
 			Algorithm: "P256-SHA256",
 			Hash:      "SHA2-256",
 		},
 		Users: users,
-		PConfigs: []gohfc.PeerConfig{
+		PConfigs: []gosdk.PeerConfig{
 			{
 				Name:             "peer0.org1.example.com",
 				Host:             "localhost:7051",
@@ -68,32 +68,32 @@ func newChaincodeClinetConfig(t *testing.T, version string) gohfc.ChaincodeConfi
 				Timeout:          3 * time.Second,
 				KeepaliveTime:    10 * time.Second,
 				KeepaliveTimeout: 3 * time.Second,
-				TlsConfig: gohfc.TlsConfig{
+				TlsConfig: gosdk.TlsConfig{
 					ServerCert: tlscert,
 				},
 				DomainName: "peer0.org1.example.com",
 				TlsMutual:  false,
 			},
 		},
-		OConfigs: []gohfc.OrdererConfig{
+		OConfigs: []gosdk.OrdererConfig{
 			{
 				Host:             "localhost:7050",
 				DomainName:       "orderer.example.com",
 				Timeout:          3 * time.Second,
 				KeepaliveTime:    10 * time.Second,
 				KeepaliveTimeout: 3 * time.Second,
-				TlsConfig: gohfc.TlsConfig{
+				TlsConfig: gosdk.TlsConfig{
 					ServerCert: ordererTLSCert,
 				},
 				UseTLS: true,
 			},
 		},
-		Channels: []gohfc.ChannelChaincodeConfig{
+		Channels: []gosdk.ChannelChaincodeConfig{
 			{
 				ChannelId:     channelName,
 				ChaincodeName: chaincodeName,
-				ChaincodeType: gohfc.ChaincodeSpec_GOLANG,
-				ChaincodePolicy: gohfc.ChaincodePolicy{
+				ChaincodeType: gosdk.ChaincodeSpec_GOLANG,
+				ChaincodePolicy: gosdk.ChaincodePolicy{
 					Orgs: []string{"org1", "org2"},
 					Rule: "or",
 				},
@@ -102,7 +102,7 @@ func newChaincodeClinetConfig(t *testing.T, version string) gohfc.ChaincodeConfi
 	}
 }
 
-func newChaincodeClinetConfigGM(t *testing.T, version string) gohfc.ChaincodeConfig {
+func newChaincodeClinetConfigGM(t *testing.T, version string) gosdk.ChaincodeConfig {
 	var cryptoPath string
 
 	if version == "v2" {
@@ -129,25 +129,25 @@ func newChaincodeClinetConfigGM(t *testing.T, version string) gohfc.ChaincodeCon
 	tlscert, err := ioutil.ReadFile(fmt.Sprintf("../../fixtures/%s/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt", cryptoPath))
 	assert.Nil(t, err, "read tls cert failed")
 
-	users := make(map[string]gohfc.UserConfig)
-	adminConfig := gohfc.UserConfig{
+	users := make(map[string]gosdk.UserConfig)
+	adminConfig := gosdk.UserConfig{
 		Cert:  adminIdentity,
 		Key:   adminKey,
 		MspID: "Org1MSP",
 	}
 	users["admin"] = adminConfig
-	userConfig := gohfc.UserConfig{
+	userConfig := gosdk.UserConfig{
 		Cert:  userIdentity,
 		Key:   userKey,
 		MspID: "Org1MSP",
 	}
 	users["user"] = userConfig
 
-	return gohfc.ChaincodeConfig{
+	return gosdk.ChaincodeConfig{
 		IsEnableSyncTx: true,
 		CryptoConfig:   gmCryptoConfig,
 		Users:          users,
-		PConfigs: []gohfc.PeerConfig{
+		PConfigs: []gosdk.PeerConfig{
 			{
 				Name:             "peer0.org1.example.com",
 				Host:             "localhost:7051",
@@ -156,32 +156,32 @@ func newChaincodeClinetConfigGM(t *testing.T, version string) gohfc.ChaincodeCon
 				Timeout:          3 * time.Second,
 				KeepaliveTime:    10 * time.Second,
 				KeepaliveTimeout: 3 * time.Second,
-				TlsConfig: gohfc.TlsConfig{
+				TlsConfig: gosdk.TlsConfig{
 					ServerCert: tlscert,
 				},
 				DomainName: "peer0.org1.example.com",
 				TlsMutual:  false,
 			},
 		},
-		OConfigs: []gohfc.OrdererConfig{
+		OConfigs: []gosdk.OrdererConfig{
 			{
 				Host:             "localhost:7050",
 				DomainName:       "orderer.example.com",
 				Timeout:          3 * time.Second,
 				KeepaliveTime:    10 * time.Second,
 				KeepaliveTimeout: 3 * time.Second,
-				TlsConfig: gohfc.TlsConfig{
+				TlsConfig: gosdk.TlsConfig{
 					ServerCert: ordererTLSCert,
 				},
 				UseTLS: true,
 			},
 		},
-		Channels: []gohfc.ChannelChaincodeConfig{
+		Channels: []gosdk.ChannelChaincodeConfig{
 			{
 				ChannelId:     channelName,
 				ChaincodeName: chaincodeName,
-				ChaincodeType: gohfc.ChaincodeSpec_GOLANG,
-				ChaincodePolicy: gohfc.ChaincodePolicy{
+				ChaincodeType: gosdk.ChaincodeSpec_GOLANG,
+				ChaincodePolicy: gosdk.ChaincodePolicy{
 					Orgs: []string{"org1", "org2"},
 					Rule: "or",
 				},

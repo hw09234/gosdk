@@ -15,7 +15,7 @@ MAKEFILE_THIS          := $(lastword $(MAKEFILE_LIST))
 THIS_PATH              := $(patsubst %/,%,$(dir $(abspath $(MAKEFILE_THIS))))
 TEST_SCRIPTS_PATH      := test/scripts
 TEST_FIXTURES_PATH     := test/fixtures
-TEST_E2E_PATH          := github.com/PeerFintech/gohfc/test/integration/e2e
+TEST_E2E_PATH          := github.com/PeerFintech/gosdk/test/integration/e2e
 
 
 export GO_CMD
@@ -80,7 +80,7 @@ clean-integration-test:
 
 .PHONY: unit-test
 unit-test:
-	@MODULE="github.com/PeerFintech/gohfc" \
+	@MODULE="github.com/PeerFintech/gosdk" \
 	PKG_ROOT="./pkg" \
 	$(TEST_SCRIPTS_PATH)/unit.sh
 

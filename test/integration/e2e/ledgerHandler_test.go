@@ -6,11 +6,11 @@ import (
 	"testing"
 	"time"
 
-	gohfc "github.com/hw09234/gohfc/pkg"
+	gosdk "github.com/hw09234/gosdk/pkg"
 	"github.com/stretchr/testify/assert"
 )
 
-func newLedgerConfig(t *testing.T, version string) gohfc.LedgerConfig {
+func newLedgerConfig(t *testing.T, version string) gosdk.LedgerConfig {
 	var cryptoPath string
 
 	if version == "v2" {
@@ -28,18 +28,18 @@ func newLedgerConfig(t *testing.T, version string) gohfc.LedgerConfig {
 	ukey, err := ioutil.ReadFile(fmt.Sprintf("../../fixtures/%s/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/priv_sk", cryptoPath))
 	assert.Nil(t, err, "read key failed")
 
-	return gohfc.LedgerConfig{
-		CryptoConfig: gohfc.CryptoConfig{
+	return gosdk.LedgerConfig{
+		CryptoConfig: gosdk.CryptoConfig{
 			Family:    "ecdsa",
 			Algorithm: "P256-SHA256",
 			Hash:      "SHA2-256",
 		},
-		UserConfig: gohfc.UserConfig{
+		UserConfig: gosdk.UserConfig{
 			Cert:  ucert,
 			Key:   ukey,
 			MspID: "Org1MSP",
 		},
-		PeersConfig: []gohfc.PeerConfig{
+		PeersConfig: []gosdk.PeerConfig{
 			{
 				Name:             "peer0.org1.example.com",
 				Host:             "localhost:7051",
@@ -48,7 +48,7 @@ func newLedgerConfig(t *testing.T, version string) gohfc.LedgerConfig {
 				Timeout:          3 * time.Second,
 				KeepaliveTime:    10 * time.Second,
 				KeepaliveTimeout: 3 * time.Second,
-				TlsConfig: gohfc.TlsConfig{
+				TlsConfig: gosdk.TlsConfig{
 					ServerCert: tlscert,
 				},
 				DomainName: "peer0.org1.example.com",
@@ -58,7 +58,7 @@ func newLedgerConfig(t *testing.T, version string) gohfc.LedgerConfig {
 	}
 }
 
-func newLedgerConfigGM(t *testing.T, version string) gohfc.LedgerConfig {
+func newLedgerConfigGM(t *testing.T, version string) gosdk.LedgerConfig {
 	var cryptoPath string
 
 	if version == "v2" {
@@ -76,14 +76,14 @@ func newLedgerConfigGM(t *testing.T, version string) gohfc.LedgerConfig {
 	ukey, err := ioutil.ReadFile(fmt.Sprintf("../../fixtures/%s/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/priv_sk", cryptoPath))
 	assert.Nil(t, err, "read key failed")
 
-	return gohfc.LedgerConfig{
+	return gosdk.LedgerConfig{
 		CryptoConfig: gmCryptoConfig,
-		UserConfig: gohfc.UserConfig{
+		UserConfig: gosdk.UserConfig{
 			Cert:  ucert,
 			Key:   ukey,
 			MspID: "Org1MSP",
 		},
-		PeersConfig: []gohfc.PeerConfig{
+		PeersConfig: []gosdk.PeerConfig{
 			{
 				Name:             "peer0.org1.example.com",
 				Host:             "localhost:7051",
@@ -92,7 +92,7 @@ func newLedgerConfigGM(t *testing.T, version string) gohfc.LedgerConfig {
 				Timeout:          3 * time.Second,
 				KeepaliveTime:    10 * time.Second,
 				KeepaliveTimeout: 3 * time.Second,
-				TlsConfig: gohfc.TlsConfig{
+				TlsConfig: gosdk.TlsConfig{
 					ServerCert: tlscert,
 				},
 				DomainName: "peer0.org1.example.com",

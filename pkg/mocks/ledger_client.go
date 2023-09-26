@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	gohfc "github.com/hw09234/gohfc/pkg"
+	gosdk "github.com/hw09234/gosdk/pkg"
 	common "github.com/hyperledger/fabric-protos-go/common"
 
 	mock "github.com/stretchr/testify/mock"
@@ -98,15 +98,15 @@ func (_m *LedgerClient) GetBlockHeight(channelName string) (uint64, error) {
 }
 
 // GetCrypto provides a mock function with given fields:
-func (_m *LedgerClient) GetCrypto() (gohfc.CryptoSuite, error) {
+func (_m *LedgerClient) GetCrypto() (gosdk.CryptoSuite, error) {
 	ret := _m.Called()
 
-	var r0 gohfc.CryptoSuite
-	if rf, ok := ret.Get(0).(func() gohfc.CryptoSuite); ok {
+	var r0 gosdk.CryptoSuite
+	if rf, ok := ret.Get(0).(func() gosdk.CryptoSuite); ok {
 		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(gohfc.CryptoSuite)
+			r0 = ret.Get(0).(gosdk.CryptoSuite)
 		}
 	}
 

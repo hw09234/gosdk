@@ -1,11 +1,11 @@
-package gohfc
+package gosdk
 
 import (
 	"math"
 	"path/filepath"
 	"strconv"
 
-	pBlock "github.com/hw09234/gohfc/pkg/parseBlock"
+	pBlock "github.com/hw09234/gosdk/pkg/parseBlock"
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-protos-go/common"
 	"github.com/hyperledger/fabric-protos-go/discovery"
@@ -95,7 +95,7 @@ func (fc *FabricClientImpl) Query(args []string, transientMap map[string][]byte,
 // event监听类函数
 
 // ListenEventFullBlock 从指定的区块号对通道进行监听
-// 返回channel，用于接受具体的区块信息，该区块信息不是原生的区块，被gohfc内部进行了整理
+// 返回channel，用于接受具体的区块信息，该区块信息不是原生的区块，被gosdk内部进行了整理
 func (fc *FabricClientImpl) ListenEventFullBlock(channelName string, startNum uint64, fullBlockCh chan pBlock.Block) chan error {
 	logger.Debug("enter fabric client listen full block progress")
 	defer logger.Debug("exit fabric client listen full block progress")

@@ -2,7 +2,7 @@
 Copyright: peerfintech. All Rights Reserved.
 */
 
-package gohfc
+package gosdk
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	pBlock "github.com/hw09234/gohfc/pkg/parseBlock"
+	pBlock "github.com/hw09234/gosdk/pkg/parseBlock"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/timestamp"

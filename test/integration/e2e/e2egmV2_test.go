@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	gohfc "github.com/hw09234/gohfc/pkg"
-	pBlock "github.com/hw09234/gohfc/pkg/parseBlock"
+	gosdk "github.com/hw09234/gosdk/pkg"
+	pBlock "github.com/hw09234/gosdk/pkg/parseBlock"
 	"github.com/hyperledger/fabric-protos-go/common"
 	"github.com/hyperledger/fabric-protos-go/discovery"
 	"github.com/stretchr/testify/assert"
@@ -26,11 +26,11 @@ const (
 func TestV2E2EGM(t *testing.T) {
 	t.Log("Ready to new fabric gm client")
 	org1ClientConfig := newOrg1ClientConfigGM(t, "v2")
-	c1, err := gohfc.NewFabricClient(&org1ClientConfig, "")
+	c1, err := gosdk.NewFabricClient(&org1ClientConfig, "")
 	assert.Nil(t, err, "new org1 client failed")
 
 	org2ClientConfig := newOrg2ClientConfigGM(t, "v2")
-	c2, err := gohfc.NewFabricClient(&org2ClientConfig, "")
+	c2, err := gosdk.NewFabricClient(&org2ClientConfig, "")
 	assert.Nil(t, err, "new org2 client failed")
 
 	t.Run("deploy Fabric network and operate org1's node by fabric client", func(t *testing.T) {
@@ -40,10 +40,10 @@ func TestV2E2EGM(t *testing.T) {
 
 		// 打包chaincode
 		t.Log("Ready to package chaincode")
-		info := gohfc.ChaincodeInfo{
+		info := gosdk.ChaincodeInfo{
 			OutputFile: "mycc.tar.gz",
 			Path:       gmChaincodePathV2,
-			Type:       gohfc.ChaincodeSpec_GOLANG,
+			Type:       gosdk.ChaincodeSpec_GOLANG,
 			Label:      "myccv1",
 		}
 		err = c1.PackageChaincode(info)
@@ -103,7 +103,7 @@ func TestV2E2EGM(t *testing.T) {
 
 		// 组织批准
 		t.Log("Ready to approve chaincode")
-		acreq := gohfc.ApproveCommitRequest{
+		acreq := gosdk.ApproveCommitRequest{
 			ChannelName:         channelName,
 			ChaincodeName:       chaincodeName,
 			ChaincodeVserison:   "1.0",
@@ -119,7 +119,7 @@ func TestV2E2EGM(t *testing.T) {
 		assert.Equal(t, common.Status_SUCCESS, ordRes.Status)
 		time.Sleep(time.Second * 5)
 
-		acreq = gohfc.ApproveCommitRequest{
+		acreq = gosdk.ApproveCommitRequest{
 			ChannelName:         channelName,
 			ChaincodeName:       chaincodeName,
 			ChaincodeVserison:   "1.0",
@@ -150,7 +150,7 @@ func TestV2E2EGM(t *testing.T) {
 		assert.Equal(t, true, acc.InitRequired)
 
 		t.Log("Check org's commitreadiness")
-		req := gohfc.CheckCommitreadinessRequest{
+		req := gosdk.CheckCommitreadinessRequest{
 			ChannelName:       channelName,
 			ChaincodeName:     chaincodeName,
 			ChaincodeVserison: "1.0",
@@ -166,7 +166,7 @@ func TestV2E2EGM(t *testing.T) {
 
 		// 进行提交
 		t.Log("Ready to commit chaincode")
-		acreq = gohfc.ApproveCommitRequest{
+		acreq = gosdk.ApproveCommitRequest{
 			ChannelName:       channelName,
 			ChaincodeName:     chaincodeName,
 			ChaincodeVserison: "1.0",
@@ -180,7 +180,7 @@ func TestV2E2EGM(t *testing.T) {
 		time.Sleep(time.Second * 5)
 
 		t.Log("Ready to query committed chaincode")
-		input := gohfc.CommittedQueryInput{
+		input := gosdk.CommittedQueryInput{
 			ChannelID: channelName,
 		}
 		_, queryResult, err := c1.QueryCommitted(input)
@@ -234,7 +234,7 @@ func TestV2E2EGM(t *testing.T) {
 		blocksNum, err := recBlock(t, cb, nil, fullErr)
 		assert.Nil(t, err)
 		assert.Equal(t, 3, blocksNum)
-		fcb := make(chan gohfc.FilteredBlockResponse)
+		fcb := make(chan gosdk.FilteredBlockResponse)
 		filterErr := c1.ListenEventFilterBlock(channelName, 0, fcb)
 		blocksNum, err = recBlock(t, nil, fcb, filterErr)
 		assert.Nil(t, err)
@@ -245,7 +245,7 @@ func TestV2E2EGM(t *testing.T) {
 		dConfig := newDiscoveryConfigGM(t, "v2")
 
 		t.Log("Ready to new discovery client")
-		dc, err := gohfc.NewDiscoveryClient(dConfig)
+		dc, err := gosdk.NewDiscoveryClient(dConfig)
 		assert.Nil(t, err)
 
 		t.Logf("Ready to discovery channel %s peers", channelName)
@@ -290,12 +290,12 @@ func TestV2E2EGM(t *testing.T) {
 		org1Config := newOrg1AdminConfigGM(t)
 		t.Log("Ready to new org1's admin client")
 
-		ccs, err := gohfc.GetInstalledCCs(org1Config.cryptoC, org1Config.userC, org1Config.peerC)
+		ccs, err := gosdk.GetInstalledCCs(org1Config.cryptoC, org1Config.userC, org1Config.peerC)
 		assert.Nil(t, err)
 		assert.Equal(t, 1, len(ccs))
 		assert.Equal(t, chaincodeName, ccs[0].Name)
 
-		ccs, err = gohfc.GetInstantiatedCCs(org1Config.cryptoC, org1Config.userC, org1Config.peerC, channelName)
+		ccs, err = gosdk.GetInstantiatedCCs(org1Config.cryptoC, org1Config.userC, org1Config.peerC, channelName)
 		assert.Nil(t, err)
 		assert.Equal(t, 1, len(ccs))
 		assert.Equal(t, chaincodeName, ccs[0].Name)
@@ -304,7 +304,7 @@ func TestV2E2EGM(t *testing.T) {
 		org2Config := newOrg2AdminConfigGM(t)
 
 		t.Log("Ready to get genesis block for mychannel")
-		genesisBlock, err := gohfc.GetOldestBlock(org2Config.cryptoC, org2Config.userC, channelName, org2Config.orderersC)
+		genesisBlock, err := gosdk.GetOldestBlock(org2Config.cryptoC, org2Config.userC, channelName, org2Config.orderersC)
 		assert.Nil(t, err)
 		assert.Equal(t, uint64(0), genesisBlock.Header.Number)
 
@@ -312,38 +312,38 @@ func TestV2E2EGM(t *testing.T) {
 		assert.Nil(t, err)
 
 		t.Log("Ready to join org2's peer to channel")
-		err = gohfc.JoinChannel(org2Config.cryptoC, org2Config.userC, org2Config.peerC, genesisBlockBytes)
+		err = gosdk.JoinChannel(org2Config.cryptoC, org2Config.userC, org2Config.peerC, genesisBlockBytes)
 		assert.Nil(t, err, "org2's peer failed to join channel")
 
 		t.Log("Ready to update org2's anchor peer")
 		anchorEnv, err := ioutil.ReadFile(org2AnchorGMPath)
 		assert.Nil(t, err, "read org2's anchor peer tx")
-		err = gohfc.UpdateChannel(org2Config.cryptoC, org2Config.userC, org2Config.orderersC, channelName, anchorEnv)
+		err = gosdk.UpdateChannel(org2Config.cryptoC, org2Config.userC, org2Config.orderersC, channelName, anchorEnv)
 		assert.Nil(t, err, "failed to update org2's anchor")
 		time.Sleep(time.Second * 60)
 
-		ccs, err = gohfc.GetInstalledCCs(org2Config.cryptoC, org2Config.userC, org2Config.peerC)
+		ccs, err = gosdk.GetInstalledCCs(org2Config.cryptoC, org2Config.userC, org2Config.peerC)
 		assert.Nil(t, err)
 		assert.Equal(t, 0, len(ccs))
 
 		// TODO 需等待peer同步到所有的区块，获取到的已实例化合约数目即为1
-		ccs, err = gohfc.GetInstantiatedCCs(org2Config.cryptoC, org2Config.userC, org2Config.peerC, channelName)
+		ccs, err = gosdk.GetInstantiatedCCs(org2Config.cryptoC, org2Config.userC, org2Config.peerC, channelName)
 		assert.Nil(t, err)
 		assert.Equal(t, 1, len(ccs))
 
 		t.Log("Ready to install chaincode on org2's peer")
 		ccPack, err := ioutil.ReadFile(ccoutPath)
 		assert.Nil(t, err, "read cc.out failed")
-		err = gohfc.InstallCCByPack(org2Config.cryptoC, org2Config.userC, org2Config.peerC, ccPack)
+		err = gosdk.InstallCCByPack(org2Config.cryptoC, org2Config.userC, org2Config.peerC, ccPack)
 		assert.Nil(t, err)
 
-		ccs, err = gohfc.GetInstalledCCs(org2Config.cryptoC, org2Config.userC, org2Config.peerC)
+		ccs, err = gosdk.GetInstalledCCs(org2Config.cryptoC, org2Config.userC, org2Config.peerC)
 		assert.Nil(t, err)
 		assert.Equal(t, 1, len(ccs))
 		assert.Equal(t, chaincodeName, ccs[0].Name)
 
 
-		ccs, err = gohfc.GetInstantiatedCCs(org2Config.cryptoC, org2Config.userC, org2Config.peerC, channelName)
+		ccs, err = gosdk.GetInstantiatedCCs(org2Config.cryptoC, org2Config.userC, org2Config.peerC, channelName)
 		assert.Nil(t, err)
 		assert.Equal(t, 1, len(ccs))
 		assert.Equal(t, chaincodeName, ccs[0].Name)
@@ -426,7 +426,7 @@ func TestV2E2EGM(t *testing.T) {
 		lConfig := newLedgerConfigGM(t, "v2")
 
 		t.Log("Ready to new ledger client")
-		lc, err := gohfc.NewLedgerClient(lConfig)
+		lc, err := gosdk.NewLedgerClient(lConfig)
 		assert.Nil(t, err)
 
 		t.Log("Ready to get block height")
@@ -471,7 +471,7 @@ func TestV2E2EGM(t *testing.T) {
 		cConfig := newChaincodeClinetConfigGM(t, "v2")
 
 		t.Log("Ready to new chaincode client")
-		cc, err := gohfc.NewChaincodeClient(cConfig)
+		cc, err := gosdk.NewChaincodeClient(cConfig)
 		assert.Nil(t, err)
 
 		t.Log("Ready to add users")
@@ -511,7 +511,7 @@ func TestV2E2EGM(t *testing.T) {
 
 		cConfig.OConfigs = nil
 		t.Log("Ready to new chaincode client just for peer")
-		ccPeer, err := gohfc.NewChaincodeClient(cConfig)
+		ccPeer, err := gosdk.NewChaincodeClient(cConfig)
 		assert.Nil(t, err)
 
 		t.Log("Ready to query chaincode by ccPeer again")
@@ -533,13 +533,13 @@ func TestV2E2EGM(t *testing.T) {
 		eConfig := newEventConfigGM(t, "v2")
 
 		t.Log("Ready to new event client")
-		ec, err := gohfc.NewEventClient(eConfig)
+		ec, err := gosdk.NewEventClient(eConfig)
 		assert.Nil(t, err)
 		cb := make(chan pBlock.Block)
 		fullErr := ec.ListenEventFullBlock(0, cb)
 		assert.Nil(t, err)
 		assert.NotNil(t, cb)
-		fcb := make(chan gohfc.FilteredBlockResponse)
+		fcb := make(chan gosdk.FilteredBlockResponse)
 		filterErr := ec.ListenEventFilterBlock(0, fcb)
 		assert.Nil(t, err)
 		assert.NotNil(t, fcb)

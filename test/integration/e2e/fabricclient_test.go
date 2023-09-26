@@ -6,11 +6,11 @@ import (
 	"testing"
 	"time"
 
-	gohfc "github.com/hw09234/gohfc/pkg"
+	gosdk "github.com/hw09234/gosdk/pkg"
 	"github.com/stretchr/testify/assert"
 )
 
-func newOrg1ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
+func newOrg1ClientConfig(t *testing.T, version string) gosdk.ClientConfig {
 	var cryptoPath string
 
 	if version == "v2" {
@@ -40,8 +40,8 @@ func newOrg1ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 	userKey, err := ioutil.ReadFile(fmt.Sprintf("../../fixtures/%s/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/priv_sk", cryptoPath))
 	assert.Nil(t, err, "read user key failed")
 
-	orderers := make(map[string]gohfc.OrdererConfig)
-	ordererConfig := gohfc.OrdererConfig{
+	orderers := make(map[string]gosdk.OrdererConfig)
+	ordererConfig := gosdk.OrdererConfig{
 		Name:             "orderer.example.com",
 		Host:             "localhost:7050",
 		OrgName:          "",
@@ -51,11 +51,11 @@ func newOrg1ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout: 30 * time.Second,
 		DomainName:       "orderer.example.com",
 		TlsMutual:        false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: ordererCACert,
 		},
 	}
-	orderer2Config := gohfc.OrdererConfig{
+	orderer2Config := gosdk.OrdererConfig{
 		Name:             "orderer2.example.com",
 		Host:             "localhost:8050",
 		OrgName:          "",
@@ -65,11 +65,11 @@ func newOrg1ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout: 30 * time.Second,
 		DomainName:       "orderer2.example.com",
 		TlsMutual:        false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: ordererCACert,
 		},
 	}
-	orderer3Config := gohfc.OrdererConfig{
+	orderer3Config := gosdk.OrdererConfig{
 		Name:             "orderer3.example.com",
 		Host:             "localhost:9050",
 		OrgName:          "",
@@ -79,7 +79,7 @@ func newOrg1ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout: 30 * time.Second,
 		DomainName:       "orderer3.example.com",
 		TlsMutual:        false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: ordererCACert,
 		},
 	}
@@ -87,8 +87,8 @@ func newOrg1ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 	orderers["orderer1"] = orderer2Config
 	orderers["orderer2"] = orderer3Config
 
-	peers := make(map[string]gohfc.PeerConfig)
-	peerConfig01 := gohfc.PeerConfig{
+	peers := make(map[string]gosdk.PeerConfig)
+	peerConfig01 := gosdk.PeerConfig{
 		Name:               "peer0.org1.example.com",
 		Host:               "localhost:7051",
 		OrgName:            "org1",
@@ -99,11 +99,11 @@ func newOrg1ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout:   30 * time.Second,
 		DomainName:         "peer0.org1.example.com",
 		TlsMutual:          false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: peer01CACert,
 		},
 	}
-	peerConfig02 := gohfc.PeerConfig{
+	peerConfig02 := gosdk.PeerConfig{
 		Name:               "peer0.org2.example.com",
 		Host:               "localhost:9051",
 		OrgName:            "org2",
@@ -114,14 +114,14 @@ func newOrg1ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout:   30 * time.Second,
 		DomainName:         "peer0.org2.example.com",
 		TlsMutual:          false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: peer02CACert,
 		},
 	}
 	peers["peer01"] = peerConfig01
 	peers["peer02"] = peerConfig02
 
-	eventPeerConfigs := []gohfc.PeerConfig{
+	eventPeerConfigs := []gosdk.PeerConfig{
 		{
 			Name:               "peer0.org1.example.com",
 			Host:               "localhost:7051",
@@ -133,28 +133,28 @@ func newOrg1ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 			KeepaliveTimeout:   30 * time.Second,
 			DomainName:         "peer0.org1.example.com",
 			TlsMutual:          false,
-			TlsConfig: gohfc.TlsConfig{
+			TlsConfig: gosdk.TlsConfig{
 				ServerCert: peer01CACert,
 			},
 		},
 	}
 
-	users := make(map[string]gohfc.UserConfig)
-	adminConfig := gohfc.UserConfig{
+	users := make(map[string]gosdk.UserConfig)
+	adminConfig := gosdk.UserConfig{
 		Cert:  adminIdentity,
 		Key:   adminKey,
 		MspID: "Org1MSP",
 	}
 	users["org1Admin"] = adminConfig
-	userConfig := gohfc.UserConfig{
+	userConfig := gosdk.UserConfig{
 		Cert:  userIdentity,
 		Key:   userKey,
 		MspID: "Org1MSP",
 	}
 	users["org1User"] = userConfig
 
-	config := gohfc.ClientConfig{
-		Crypto: gohfc.CryptoConfig{
+	config := gosdk.ClientConfig{
+		Crypto: gosdk.CryptoConfig{
 			Family:    "ecdsa",
 			Algorithm: "P256-SHA256",
 			Hash:      "SHA2-256",
@@ -163,12 +163,12 @@ func newOrg1ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 		Peers:      peers,
 		EventPeers: eventPeerConfigs,
 		Users:      users,
-		Channels: []gohfc.ChannelChaincodeConfig{{
+		Channels: []gosdk.ChannelChaincodeConfig{{
 			ChannelId:        "mychannel",
 			ChaincodeName:    "mycc",
 			ChaincodeVersion: "1.0",
-			ChaincodeType:    gohfc.ChaincodeSpec_GOLANG,
-			ChaincodePolicy: gohfc.ChaincodePolicy{
+			ChaincodeType:    gosdk.ChaincodeSpec_GOLANG,
+			ChaincodePolicy: gosdk.ChaincodePolicy{
 				Orgs: []string{"org1", "org2"},
 				Rule: "or",
 			}},
@@ -178,7 +178,7 @@ func newOrg1ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 	return config
 }
 
-func newOrg2ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
+func newOrg2ClientConfig(t *testing.T, version string) gosdk.ClientConfig {
 	var cryptoPath string
 
 	if version == "v2" {
@@ -208,8 +208,8 @@ func newOrg2ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 	userKey2, err := ioutil.ReadFile(fmt.Sprintf("../../fixtures/%s/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp/keystore/priv_sk", cryptoPath))
 	assert.Nil(t, err, "read user key failed")
 
-	orderers := make(map[string]gohfc.OrdererConfig)
-	ordererConfig := gohfc.OrdererConfig{
+	orderers := make(map[string]gosdk.OrdererConfig)
+	ordererConfig := gosdk.OrdererConfig{
 		Name:             "orderer.example.com",
 		Host:             "localhost:7050",
 		OrgName:          "",
@@ -219,11 +219,11 @@ func newOrg2ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout: 30 * time.Second,
 		DomainName:       "orderer.example.com",
 		TlsMutual:        false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: ordererCACert,
 		},
 	}
-	orderer2Config := gohfc.OrdererConfig{
+	orderer2Config := gosdk.OrdererConfig{
 		Name:             "orderer2.example.com",
 		Host:             "localhost:8050",
 		OrgName:          "",
@@ -233,11 +233,11 @@ func newOrg2ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout: 30 * time.Second,
 		DomainName:       "orderer2.example.com",
 		TlsMutual:        false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: ordererCACert,
 		},
 	}
-	orderer3Config := gohfc.OrdererConfig{
+	orderer3Config := gosdk.OrdererConfig{
 		Name:             "orderer3.example.com",
 		Host:             "localhost:9050",
 		OrgName:          "",
@@ -247,7 +247,7 @@ func newOrg2ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout: 30 * time.Second,
 		DomainName:       "orderer3.example.com",
 		TlsMutual:        false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: ordererCACert,
 		},
 	}
@@ -255,8 +255,8 @@ func newOrg2ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 	orderers["orderer1"] = orderer2Config
 	orderers["orderer2"] = orderer3Config
 
-	peers := make(map[string]gohfc.PeerConfig)
-	peerConfig01 := gohfc.PeerConfig{
+	peers := make(map[string]gosdk.PeerConfig)
+	peerConfig01 := gosdk.PeerConfig{
 		Name:               "peer0.org1.example.com",
 		Host:               "localhost:7051",
 		OrgName:            "org1",
@@ -267,11 +267,11 @@ func newOrg2ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout:   30 * time.Second,
 		DomainName:         "peer0.org1.example.com",
 		TlsMutual:          false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: peer01CACert,
 		},
 	}
-	peerConfig02 := gohfc.PeerConfig{
+	peerConfig02 := gosdk.PeerConfig{
 		Name:               "peer0.org2.example.com",
 		Host:               "localhost:9051",
 		OrgName:            "org2",
@@ -282,14 +282,14 @@ func newOrg2ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout:   30 * time.Second,
 		DomainName:         "peer0.org2.example.com",
 		TlsMutual:          false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: peer02CACert,
 		},
 	}
 	peers["peer01"] = peerConfig01
 	peers["peer02"] = peerConfig02
 
-	eventPeerConfigs := []gohfc.PeerConfig{
+	eventPeerConfigs := []gosdk.PeerConfig{
 		{
 			Name:               "peer0.org1.example.com",
 			Host:               "localhost:7051",
@@ -301,28 +301,28 @@ func newOrg2ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 			KeepaliveTimeout:   30 * time.Second,
 			DomainName:         "peer0.org1.example.com",
 			TlsMutual:          false,
-			TlsConfig: gohfc.TlsConfig{
+			TlsConfig: gosdk.TlsConfig{
 				ServerCert: peer01CACert,
 			},
 		},
 	}
 
-	users := make(map[string]gohfc.UserConfig)
-	adminConfig2 := gohfc.UserConfig{
+	users := make(map[string]gosdk.UserConfig)
+	adminConfig2 := gosdk.UserConfig{
 		Cert:  adminIdentity2,
 		Key:   adminKey2,
 		MspID: "Org2MSP",
 	}
 	users["org2Admin"] = adminConfig2
-	userConfig2 := gohfc.UserConfig{
+	userConfig2 := gosdk.UserConfig{
 		Cert:  userIdentity2,
 		Key:   userKey2,
 		MspID: "Org2MSP",
 	}
 	users["org2User"] = userConfig2
 
-	config := gohfc.ClientConfig{
-		Crypto: gohfc.CryptoConfig{
+	config := gosdk.ClientConfig{
+		Crypto: gosdk.CryptoConfig{
 			Family:    "ecdsa",
 			Algorithm: "P256-SHA256",
 			Hash:      "SHA2-256",
@@ -331,12 +331,12 @@ func newOrg2ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 		Peers:      peers,
 		EventPeers: eventPeerConfigs,
 		Users:      users,
-		Channels: []gohfc.ChannelChaincodeConfig{{
+		Channels: []gosdk.ChannelChaincodeConfig{{
 			ChannelId:        "mychannel",
 			ChaincodeName:    "mycc",
 			ChaincodeVersion: "1.0",
-			ChaincodeType:    gohfc.ChaincodeSpec_GOLANG,
-			ChaincodePolicy: gohfc.ChaincodePolicy{
+			ChaincodeType:    gosdk.ChaincodeSpec_GOLANG,
+			ChaincodePolicy: gosdk.ChaincodePolicy{
 				Orgs: []string{"org1", "org2"},
 				Rule: "or",
 			}},
@@ -346,7 +346,7 @@ func newOrg2ClientConfig(t *testing.T, version string) gohfc.ClientConfig {
 	return config
 }
 
-func newUser(t *testing.T, version string) gohfc.UserConfig {
+func newUser(t *testing.T, version string) gosdk.UserConfig {
 	var cryptoPath string
 
 	if version == "v2" {
@@ -361,7 +361,7 @@ func newUser(t *testing.T, version string) gohfc.UserConfig {
 	userKey, err := ioutil.ReadFile(fmt.Sprintf("../../fixtures/%s/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/priv_sk", cryptoPath))
 	assert.Nil(t, err, "read user key failed")
 
-	userConfig := gohfc.UserConfig{
+	userConfig := gosdk.UserConfig{
 		Cert:  userIdentity,
 		Key:   userKey,
 		MspID: "Org1MSP",
@@ -370,7 +370,7 @@ func newUser(t *testing.T, version string) gohfc.UserConfig {
 	return userConfig
 }
 
-func newUserGM(t *testing.T, version string) gohfc.UserConfig {
+func newUserGM(t *testing.T, version string) gosdk.UserConfig {
 	var cryptoPath string
 
 	if version == "v2" {
@@ -385,7 +385,7 @@ func newUserGM(t *testing.T, version string) gohfc.UserConfig {
 	userKey, err := ioutil.ReadFile(fmt.Sprintf("../../fixtures/%s/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/priv_sk", cryptoPath))
 	assert.Nil(t, err, "read user key failed")
 
-	userConfig := gohfc.UserConfig{
+	userConfig := gosdk.UserConfig{
 		Cert:  userIdentity,
 		Key:   userKey,
 		MspID: "Org1MSP",
@@ -394,7 +394,7 @@ func newUserGM(t *testing.T, version string) gohfc.UserConfig {
 	return userConfig
 }
 
-func newOrg1ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
+func newOrg1ClientConfigGM(t *testing.T, version string) gosdk.ClientConfig {
 	var cryptoPath string
 
 	if version == "v2" {
@@ -424,8 +424,8 @@ func newOrg1ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 	userKey, err := ioutil.ReadFile(fmt.Sprintf("../../fixtures/%s/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/priv_sk", cryptoPath))
 	assert.Nil(t, err, "read user key failed")
 
-	orderers := make(map[string]gohfc.OrdererConfig)
-	ordererConfig := gohfc.OrdererConfig{
+	orderers := make(map[string]gosdk.OrdererConfig)
+	ordererConfig := gosdk.OrdererConfig{
 		Name:             "orderer.example.com",
 		Host:             "localhost:7050",
 		OrgName:          "",
@@ -435,12 +435,12 @@ func newOrg1ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout: 30 * time.Second,
 		DomainName:       "orderer.example.com",
 		TlsMutual:        false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: ordererCACert,
 		},
 	}
 
-	orderer2Config := gohfc.OrdererConfig{
+	orderer2Config := gosdk.OrdererConfig{
 		Name:             "orderer2.example.com",
 		Host:             "localhost:8050",
 		OrgName:          "",
@@ -450,11 +450,11 @@ func newOrg1ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout: 30 * time.Second,
 		DomainName:       "orderer2.example.com",
 		TlsMutual:        false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: ordererCACert,
 		},
 	}
-	orderer3Config := gohfc.OrdererConfig{
+	orderer3Config := gosdk.OrdererConfig{
 		Name:             "orderer3.example.com",
 		Host:             "localhost:9050",
 		OrgName:          "",
@@ -464,7 +464,7 @@ func newOrg1ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout: 30 * time.Second,
 		DomainName:       "orderer3.example.com",
 		TlsMutual:        false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: ordererCACert,
 		},
 	}
@@ -473,8 +473,8 @@ func newOrg1ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 	orderers["orderer1"] = orderer2Config
 	orderers["orderer2"] = orderer3Config
 
-	peers := make(map[string]gohfc.PeerConfig)
-	peerConfig := gohfc.PeerConfig{
+	peers := make(map[string]gosdk.PeerConfig)
+	peerConfig := gosdk.PeerConfig{
 		Name:               "peer0.org1.example.com",
 		Host:               "localhost:7051",
 		OrgName:            "org1",
@@ -485,11 +485,11 @@ func newOrg1ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout:   30 * time.Second,
 		DomainName:         "peer0.org1.example.com",
 		TlsMutual:          false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: peer01CACert,
 		},
 	}
-	peerConfig2 := gohfc.PeerConfig{
+	peerConfig2 := gosdk.PeerConfig{
 		Name:               "peer0.org2.example.com",
 		Host:               "localhost:9051",
 		OrgName:            "org2",
@@ -500,14 +500,14 @@ func newOrg1ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout:   30 * time.Second,
 		DomainName:         "peer0.org2.example.com",
 		TlsMutual:          false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: peer02CACert,
 		},
 	}
 	peers["peer01"] = peerConfig
 	peers["peer02"] = peerConfig2
 
-	eventPeerConfig := []gohfc.PeerConfig{
+	eventPeerConfig := []gosdk.PeerConfig{
 		{
 			Name:               "peer0.org1.example.com",
 			Host:               "localhost:7051",
@@ -519,28 +519,28 @@ func newOrg1ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 			KeepaliveTimeout:   30 * time.Second,
 			DomainName:         "peer0.org1.example.com",
 			TlsMutual:          false,
-			TlsConfig: gohfc.TlsConfig{
+			TlsConfig: gosdk.TlsConfig{
 				ServerCert: peer01CACert,
 			},
 		},
 	}
 
-	users := make(map[string]gohfc.UserConfig)
-	adminConfig := gohfc.UserConfig{
+	users := make(map[string]gosdk.UserConfig)
+	adminConfig := gosdk.UserConfig{
 		Cert:  adminIdentity,
 		Key:   adminKey,
 		MspID: "Org1MSP",
 	}
 	users["org1Admin"] = adminConfig
-	userConfig := gohfc.UserConfig{
+	userConfig := gosdk.UserConfig{
 		Cert:  userIdentity,
 		Key:   userKey,
 		MspID: "Org1MSP",
 	}
 	users["org1User"] = userConfig
 
-	config := gohfc.ClientConfig{
-		Crypto: gohfc.CryptoConfig{
+	config := gosdk.ClientConfig{
+		Crypto: gosdk.CryptoConfig{
 			Family:    "gm",
 			Algorithm: "P256SM2",
 			Hash:      "SM3",
@@ -549,12 +549,12 @@ func newOrg1ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 		Peers:      peers,
 		EventPeers: eventPeerConfig,
 		Users:      users,
-		Channels: []gohfc.ChannelChaincodeConfig{{
+		Channels: []gosdk.ChannelChaincodeConfig{{
 			ChannelId:        "mychannel",
 			ChaincodeName:    "mycc",
 			ChaincodeVersion: "1.0",
-			ChaincodeType:    gohfc.ChaincodeSpec_GOLANG,
-			ChaincodePolicy: gohfc.ChaincodePolicy{
+			ChaincodeType:    gosdk.ChaincodeSpec_GOLANG,
+			ChaincodePolicy: gosdk.ChaincodePolicy{
 				Orgs: []string{"org1", "org2"},
 				Rule: "or",
 			}},
@@ -564,7 +564,7 @@ func newOrg1ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 	return config
 }
 
-func newOrg2ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
+func newOrg2ClientConfigGM(t *testing.T, version string) gosdk.ClientConfig {
 	var cryptoPath string
 
 	if version == "v2" {
@@ -594,8 +594,8 @@ func newOrg2ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 	userKey2, err := ioutil.ReadFile(fmt.Sprintf("../../fixtures/%s/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp/keystore/priv_sk", cryptoPath))
 	assert.Nil(t, err, "read user key failed")
 
-	orderers := make(map[string]gohfc.OrdererConfig)
-	ordererConfig := gohfc.OrdererConfig{
+	orderers := make(map[string]gosdk.OrdererConfig)
+	ordererConfig := gosdk.OrdererConfig{
 		Name:             "orderer.example.com",
 		Host:             "localhost:7050",
 		OrgName:          "",
@@ -605,12 +605,12 @@ func newOrg2ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout: 30 * time.Second,
 		DomainName:       "orderer.example.com",
 		TlsMutual:        false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: ordererCACert,
 		},
 	}
 
-	orderer2Config := gohfc.OrdererConfig{
+	orderer2Config := gosdk.OrdererConfig{
 		Name:             "orderer2.example.com",
 		Host:             "localhost:8050",
 		OrgName:          "",
@@ -620,11 +620,11 @@ func newOrg2ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout: 30 * time.Second,
 		DomainName:       "orderer2.example.com",
 		TlsMutual:        false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: ordererCACert,
 		},
 	}
-	orderer3Config := gohfc.OrdererConfig{
+	orderer3Config := gosdk.OrdererConfig{
 		Name:             "orderer3.example.com",
 		Host:             "localhost:9050",
 		OrgName:          "",
@@ -634,7 +634,7 @@ func newOrg2ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout: 30 * time.Second,
 		DomainName:       "orderer3.example.com",
 		TlsMutual:        false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: ordererCACert,
 		},
 	}
@@ -643,8 +643,8 @@ func newOrg2ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 	orderers["orderer1"] = orderer2Config
 	orderers["orderer2"] = orderer3Config
 
-	peers := make(map[string]gohfc.PeerConfig)
-	peerConfig := gohfc.PeerConfig{
+	peers := make(map[string]gosdk.PeerConfig)
+	peerConfig := gosdk.PeerConfig{
 		Name:               "peer0.org1.example.com",
 		Host:               "localhost:7051",
 		OrgName:            "org1",
@@ -655,11 +655,11 @@ func newOrg2ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout:   30 * time.Second,
 		DomainName:         "peer0.org1.example.com",
 		TlsMutual:          false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: peer01CACert,
 		},
 	}
-	peerConfig2 := gohfc.PeerConfig{
+	peerConfig2 := gosdk.PeerConfig{
 		Name:               "peer0.org2.example.com",
 		Host:               "localhost:9051",
 		OrgName:            "org2",
@@ -670,14 +670,14 @@ func newOrg2ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 		KeepaliveTimeout:   30 * time.Second,
 		DomainName:         "peer0.org2.example.com",
 		TlsMutual:          false,
-		TlsConfig: gohfc.TlsConfig{
+		TlsConfig: gosdk.TlsConfig{
 			ServerCert: peer02CACert,
 		},
 	}
 	peers["peer01"] = peerConfig
 	peers["peer02"] = peerConfig2
 
-	eventPeerConfig := []gohfc.PeerConfig{
+	eventPeerConfig := []gosdk.PeerConfig{
 		{
 			Name:               "peer0.org1.example.com",
 			Host:               "localhost:7051",
@@ -689,28 +689,28 @@ func newOrg2ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 			KeepaliveTimeout:   30 * time.Second,
 			DomainName:         "peer0.org1.example.com",
 			TlsMutual:          false,
-			TlsConfig: gohfc.TlsConfig{
+			TlsConfig: gosdk.TlsConfig{
 				ServerCert: peer01CACert,
 			},
 		},
 	}
 
-	users := make(map[string]gohfc.UserConfig)
-	adminConfig2 := gohfc.UserConfig{
+	users := make(map[string]gosdk.UserConfig)
+	adminConfig2 := gosdk.UserConfig{
 		Cert:  adminIdentity2,
 		Key:   adminKey2,
 		MspID: "Org2MSP",
 	}
 	users["org2Admin"] = adminConfig2
-	userConfig2 := gohfc.UserConfig{
+	userConfig2 := gosdk.UserConfig{
 		Cert:  userIdentity2,
 		Key:   userKey2,
 		MspID: "Org2MSP",
 	}
 	users["org2User"] = userConfig2
 
-	config := gohfc.ClientConfig{
-		Crypto: gohfc.CryptoConfig{
+	config := gosdk.ClientConfig{
+		Crypto: gosdk.CryptoConfig{
 			Family:    "gm",
 			Algorithm: "P256SM2",
 			Hash:      "SM3",
@@ -719,12 +719,12 @@ func newOrg2ClientConfigGM(t *testing.T, version string) gohfc.ClientConfig {
 		Peers:      peers,
 		EventPeers: eventPeerConfig,
 		Users:      users,
-		Channels: []gohfc.ChannelChaincodeConfig{{
+		Channels: []gosdk.ChannelChaincodeConfig{{
 			ChannelId:        "mychannel",
 			ChaincodeName:    "mycc",
 			ChaincodeVersion: "1.0",
-			ChaincodeType:    gohfc.ChaincodeSpec_GOLANG,
-			ChaincodePolicy: gohfc.ChaincodePolicy{
+			ChaincodeType:    gosdk.ChaincodeSpec_GOLANG,
+			ChaincodePolicy: gosdk.ChaincodePolicy{
 				Orgs: []string{"org1", "org2"},
 				Rule: "or",
 			}},

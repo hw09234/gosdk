@@ -1,4 +1,4 @@
-# GOHFC - Golang Hyperledger Fabric Client
+# gosdk - Golang Hyperledger Fabric Client
 
 这是使用纯Golang编写的Hyperledger Fabric的SDK。这不是官方的SDK，也不遵循Hyperledger团队提供的官方SDK API准则。有关官方SDK的列表，请参考官方Hyperledger文档。
 
@@ -11,25 +11,25 @@
 ## 安装
 
 ```
-go get -u github.com/PeerFintech/gohfc
+go get -u github.com/PeerFintech/gosdk
 
 ```
 
 ## 基本概念
 
-Gohfc提供了一个高级客户端，用于处理block，ledger，chaincode，channel和event的高级API。
+gosdk提供了一个高级客户端，用于处理block，ledger，chaincode，channel和event的高级API。
 
 一般流程是这样的：
 
-- 使用docker-compose或任何其他适合您的工具启动Fabric。运行Fabric不是gohfc的责任。
-- 使用`gohfc.NewFabricClient`，初始化gohfc
+- 使用docker-compose或任何其他适合您的工具启动Fabric。运行Fabric不是gosdk的责任。
+- 使用`gosdk.NewFabricClient`，初始化gosdk
 - 使用`CreateUpdateChannel`，通过将channel配置发送给orderer来创建channel。
 - 使用`JoinChannel`，将peer加入channel。
 - 使用`InstallChainCode`，在一个或多个peer节点中安装一个或多个链码。
 - 使用`InstantiateChainCode`，实例化一个或多个已经安装的chaincode。
 - 使用查询查询chaincode：`Query`。这是只读操作。不会对区块链或ledger进行任何更改。
 - 使用调用chaincode：`Invoke`。该操作可以更新区块链和ledger。
-- 使用`gohfc.ListenForFullBlock`或`gohfc.ListenForFilteredBlock`收听事件
+- 使用`gosdk.ListenForFullBlock`或`gosdk.ListenForFilteredBlock`收听事件
 - 还有更多的方法来获取特定的block，discover功能等。
 
 ### 关于MSPID
@@ -37,14 +37,14 @@ Fabric中的每个对等方和订购者都必须具有一组加密材料，例�
 
 通常，MSP定义组织和组织内部具有角色的实体。几个MSP合并组成一个联盟，因此多个组织（每个组织都有自己的一组证书）可以一起工作。
 
-因此，当发送对Fabric的任何请求时，此请求必须由Ecert签名（用户证书保留在中`gohfc.Identity`），并且必须提供MSPID，以便Fabric通过ID加载MSP，并验证此请求来自组织成员并且该成员具有适当的访问权限。
+因此，当发送对Fabric的任何请求时，此请求必须由Ecert签名（用户证书保留在中`gosdk.Identity`），并且必须提供MSPID，以便Fabric通过ID加载MSP，并验证此请求来自组织成员并且该成员具有适当的访问权限。
 
 ```
 
-gohfc初始化：
+gosdk初始化：
 
 ```
-c1, err := gohfc.NewFabricClient(&org1ClientConfig)
+c1, err := gosdk.NewFabricClient(&org1ClientConfig)
 if err != nil {
     fmt.Printf("Error loading file: %v", err)
 	os.Exit(1)
@@ -54,21 +54,21 @@ if err != nil {
 
 ### 安装 chaincode
 
-安装新的链码时，`gohfc.InstallRequest`必须提供一个类型为struct的结构：
+安装新的链码时，`gosdk.InstallRequest`必须提供一个类型为struct的结构：
 
 ```
 
-installRequest := &gohfc.InstallRequest{
+installRequest := &gosdk.InstallRequest{
 	ChannelId:        channelName,
 	ChainCodeName:    chaincodeName,
 	ChainCodeVersion: "1.0",
-	ChainCodeType:    gohfc.ChaincodeSpec_GOLANG,
-	Namespace:        "github.com/PeerFintech/gohfc/test/fixtures/chaincode",
+	ChainCodeType:    gosdk.ChaincodeSpec_GOLANG,
+	Namespace:        "github.com/PeerFintech/gosdk/test/fixtures/chaincode",
 	SrcPath:          chaincodePath,
 }
 ```
 
-Fabric将支持用不同语言编写的链码，因此必须使用`ChainCodeType`--Gohfc指定语言类型。现在仅支持Go。其他代码语言将在以后添加。
+Fabric将支持用不同语言编写的链码，因此必须使用`ChainCodeType`--gosdk指定语言类型。现在仅支持Go。其他代码语言将在以后添加。
 
 `ChannelId` 是安装chaincode的通道名称。
 
@@ -76,18 +76,18 @@ Fabric将支持用不同语言编写的链码，因此必须使用`ChainCodeType
 
 `ChainCodeVersion` 指定版本。
 
-Gohfc设计为无需Go环境即可工作。因此，当用户尝试安装chaincode时必须提供`Namespace`,`SrcPath` and `Libraries`（可选）
+gosdk设计为无需Go环境即可工作。因此，当用户尝试安装chaincode时必须提供`Namespace`,`SrcPath` and `Libraries`（可选）
 
 `Namespace` 是Go命名空间，它将在Fabric运行时中"install"chaincode。比如 `github.com/some/code`
 
 `SrcPath` 是源代码所在的绝对路径，为打包安装做准备。 
 
-这种分离使gohfc可以在没有任何外部运行时依赖项的情况下运行。
+这种分离使gosdk可以在没有任何外部运行时依赖项的情况下运行。
 
 `Libraries` 是链表打包中将包含的库的可选列表。遵循`Namespace`和`SrcPath`同样的逻辑。
 
 ## Development Process
-当前gohfc项目由两地团队进行共同维护开发，为提高开发效率与质量，需借助项目管理工具进行任务管理，同时需遵守相应的流程。当前采用github的Projects和Issues功能来跟踪对应的任务与进度。实际开发过程中的具体流程如下：  
+当前gosdk项目由两地团队进行共同维护开发，为提高开发效率与质量，需借助项目管理工具进行任务管理，同时需遵守相应的流程。当前采用github的Projects和Issues功能来跟踪对应的任务与进度。实际开发过程中的具体流程如下：  
 1) 增加note  
 在Projects界面中选择对应的project后，在对应的"To do"列表中点击“+”号增加，此处只需填写标题。  
 ![增加note1](images/add_note.png)
@@ -122,7 +122,7 @@ Gohfc设计为无需Go环境即可工作。因此，当用户尝试安装chainco
 | ecdsa    | P384-SHA384 | Elliptic curve is P384 and signature uses SHA384 |
 | ecdsa    | P521-SHA512 | Elliptic curve is P521 and signature uses SHA512 |
 | rsa      | ----        | RSA is not supported in Fabric                   |
-| SM       | P256SM2     | gohfc支持国密算法                                |
+| SM       | P256SM2     | gosdk支持国密算法                                |
 
 ### Hash
 

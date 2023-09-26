@@ -9,15 +9,15 @@ import (
 	"testing"
 	"time"
 
-	pBlock "github.com/hw09234/gohfc/pkg/parseBlock"
+	pBlock "github.com/hw09234/gosdk/pkg/parseBlock"
 
-	gohfc "github.com/hw09234/gohfc/pkg"
+	gosdk "github.com/hw09234/gosdk/pkg"
 	"github.com/stretchr/testify/require"
 )
 
 func TestEventProvider_ListenEventFullBlock(t *testing.T) {
 	eventConf := newEventConfig(t, "v1")
-	ep, err := gohfc.NewEventClient(eventConf)
+	ep, err := gosdk.NewEventClient(eventConf)
 	require.NoError(t, err)
 	ch := make(chan pBlock.Block)
 	errCh := ep.ListenEventFullBlock(2, ch)
@@ -44,9 +44,9 @@ func TestEventProvider_ListenEventFullBlock(t *testing.T) {
 
 func TestEventProvider_ListenEventFilterBlock(t *testing.T) {
 	eventConf := newEventConfig(t, "v1")
-	ep, err := gohfc.NewEventClient(eventConf)
+	ep, err := gosdk.NewEventClient(eventConf)
 	require.NoError(t, err)
-	ch := make(chan gohfc.FilteredBlockResponse)
+	ch := make(chan gosdk.FilteredBlockResponse)
 	errCh := ep.ListenEventFilterBlock(2, ch)
 	require.NoError(t, err)
 	sig := make(chan os.Signal)
@@ -74,7 +74,7 @@ func TestEventProvider_ListenEventFilterBlock(t *testing.T) {
 	}
 }
 
-func newEventConfig(t *testing.T, version string) gohfc.EventConfig {
+func newEventConfig(t *testing.T, version string) gosdk.EventConfig {
 	var tls, admin string
 
 	if version == "v2" {
@@ -87,7 +87,7 @@ func newEventConfig(t *testing.T, version string) gohfc.EventConfig {
 
 	tlsBytes, err := ioutil.ReadFile(tls)
 	require.NoError(t, err)
-	peerConf := []gohfc.PeerConfig{
+	peerConf := []gosdk.PeerConfig{
 		{
 			Name:             "peer0.org1.example.com",
 			Host:             "localhost:7051",
@@ -95,7 +95,7 @@ func newEventConfig(t *testing.T, version string) gohfc.EventConfig {
 			KeepaliveTime:    10 * time.Second,
 			KeepaliveTimeout: 3 * time.Second,
 			DomainName:       "peer0.org1.example.com",
-			TlsConfig: gohfc.TlsConfig{
+			TlsConfig: gosdk.TlsConfig{
 				ServerCert: tlsBytes,
 			},
 			UseTLS: true,
@@ -107,12 +107,12 @@ func newEventConfig(t *testing.T, version string) gohfc.EventConfig {
 	require.NoError(t, err)
 	keyBytes, err := ioutil.ReadFile(prikey)
 	require.NoError(t, err)
-	userConf := gohfc.UserConfig{
+	userConf := gosdk.UserConfig{
 		Cert:  certBytes,
 		Key:   keyBytes,
 		MspID: "Org1MSP",
 	}
-	return gohfc.EventConfig{
+	return gosdk.EventConfig{
 		CryptoConfig: cryptoConfig,
 		PeerConfigs:  peerConf,
 		UserConfig:   userConf,
@@ -120,7 +120,7 @@ func newEventConfig(t *testing.T, version string) gohfc.EventConfig {
 	}
 }
 
-func newEventConfigGM(t *testing.T, version string) gohfc.EventConfig {
+func newEventConfigGM(t *testing.T, version string) gosdk.EventConfig {
 	var tls, admin string
 
 	if version == "v2" {
@@ -133,7 +133,7 @@ func newEventConfigGM(t *testing.T, version string) gohfc.EventConfig {
 
 	tlsBytes, err := ioutil.ReadFile(tls)
 	require.NoError(t, err)
-	peerConf := []gohfc.PeerConfig{
+	peerConf := []gosdk.PeerConfig{
 		{
 			Name:             "peer0.org1.example.com",
 			Host:             "localhost:7051",
@@ -141,7 +141,7 @@ func newEventConfigGM(t *testing.T, version string) gohfc.EventConfig {
 			KeepaliveTime:    10 * time.Second,
 			KeepaliveTimeout: 3 * time.Second,
 			DomainName:       "peer0.org1.example.com",
-			TlsConfig: gohfc.TlsConfig{
+			TlsConfig: gosdk.TlsConfig{
 				ServerCert: tlsBytes,
 			},
 			UseTLS: true,
@@ -153,12 +153,12 @@ func newEventConfigGM(t *testing.T, version string) gohfc.EventConfig {
 	require.NoError(t, err)
 	keyBytes, err := ioutil.ReadFile(prikey)
 	require.NoError(t, err)
-	userConf := gohfc.UserConfig{
+	userConf := gosdk.UserConfig{
 		Cert:  certBytes,
 		Key:   keyBytes,
 		MspID: "Org1MSP",
 	}
-	return gohfc.EventConfig{
+	return gosdk.EventConfig{
 		CryptoConfig: gmCryptoConfig,
 		PeerConfigs:  peerConf,
 		UserConfig:   userConf,
@@ -201,7 +201,7 @@ func findCertAndKeyFile(msppath string) (string, string, error) {
 /*
 func TestEventClient_ListenEventFullBlock(t *testing.T) {
 	clientConfig := newClientConfig(t)
-	sdk, err := gohfc.NewFabricClient(&clientConfig)
+	sdk, err := gosdk.NewFabricClient(&clientConfig)
 	require.Nil(t, err, "init sdk failed")
 	t.Log("Init sdk success...")
 
@@ -226,7 +226,7 @@ func TestEventClient_ListenEventFullBlock(t *testing.T) {
 
 func TestEventClient_ListenEventFilterBlock(t *testing.T) {
 	clientConfig := newClientConfig(t)
-	sdk, err := gohfc.NewFabricClient(&clientConfig)
+	sdk, err := gosdk.NewFabricClient(&clientConfig)
 	require.Nil(t, err, "init sdk failed")
 	t.Log("Init sdk success...")
 

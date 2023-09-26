@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	gohfc "github.com/hw09234/gohfc/pkg"
+	gosdk "github.com/hw09234/gosdk/pkg"
 	discovery "github.com/hyperledger/fabric-protos-go/discovery"
 
 	mock "github.com/stretchr/testify/mock"
@@ -38,15 +38,15 @@ func (_m *DiscoveryClient) DiscoveryChannelConfig(channel string) (*discovery.Co
 }
 
 // DiscoveryChannelPeers provides a mock function with given fields: channel
-func (_m *DiscoveryClient) DiscoveryChannelPeers(channel string) ([]gohfc.ChannelPeer, error) {
+func (_m *DiscoveryClient) DiscoveryChannelPeers(channel string) ([]gosdk.ChannelPeer, error) {
 	ret := _m.Called(channel)
 
-	var r0 []gohfc.ChannelPeer
-	if rf, ok := ret.Get(0).(func(string) []gohfc.ChannelPeer); ok {
+	var r0 []gosdk.ChannelPeer
+	if rf, ok := ret.Get(0).(func(string) []gosdk.ChannelPeer); ok {
 		r0 = rf(channel)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]gohfc.ChannelPeer)
+			r0 = ret.Get(0).([]gosdk.ChannelPeer)
 		}
 	}
 
@@ -61,15 +61,15 @@ func (_m *DiscoveryClient) DiscoveryChannelPeers(channel string) ([]gohfc.Channe
 }
 
 // DiscoveryEndorsePolicy provides a mock function with given fields: channel, chaincodes, collections
-func (_m *DiscoveryClient) DiscoveryEndorsePolicy(channel string, chaincodes []string, collections map[string]string) ([]gohfc.EndorsermentDescriptor, error) {
+func (_m *DiscoveryClient) DiscoveryEndorsePolicy(channel string, chaincodes []string, collections map[string]string) ([]gosdk.EndorsermentDescriptor, error) {
 	ret := _m.Called(channel, chaincodes, collections)
 
-	var r0 []gohfc.EndorsermentDescriptor
-	if rf, ok := ret.Get(0).(func(string, []string, map[string]string) []gohfc.EndorsermentDescriptor); ok {
+	var r0 []gosdk.EndorsermentDescriptor
+	if rf, ok := ret.Get(0).(func(string, []string, map[string]string) []gosdk.EndorsermentDescriptor); ok {
 		r0 = rf(channel, chaincodes, collections)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]gohfc.EndorsermentDescriptor)
+			r0 = ret.Get(0).([]gosdk.EndorsermentDescriptor)
 		}
 	}
 
@@ -84,15 +84,15 @@ func (_m *DiscoveryClient) DiscoveryEndorsePolicy(channel string, chaincodes []s
 }
 
 // DiscoveryLocalPeers provides a mock function with given fields:
-func (_m *DiscoveryClient) DiscoveryLocalPeers() ([]gohfc.LocalPeer, error) {
+func (_m *DiscoveryClient) DiscoveryLocalPeers() ([]gosdk.LocalPeer, error) {
 	ret := _m.Called()
 
-	var r0 []gohfc.LocalPeer
-	if rf, ok := ret.Get(0).(func() []gohfc.LocalPeer); ok {
+	var r0 []gosdk.LocalPeer
+	if rf, ok := ret.Get(0).(func() []gosdk.LocalPeer); ok {
 		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]gohfc.LocalPeer)
+			r0 = ret.Get(0).([]gosdk.LocalPeer)
 		}
 	}
 
@@ -107,15 +107,15 @@ func (_m *DiscoveryClient) DiscoveryLocalPeers() ([]gohfc.LocalPeer, error) {
 }
 
 // GetCrypto provides a mock function with given fields:
-func (_m *DiscoveryClient) GetCrypto() (gohfc.CryptoSuite, error) {
+func (_m *DiscoveryClient) GetCrypto() (gosdk.CryptoSuite, error) {
 	ret := _m.Called()
 
-	var r0 gohfc.CryptoSuite
-	if rf, ok := ret.Get(0).(func() gohfc.CryptoSuite); ok {
+	var r0 gosdk.CryptoSuite
+	if rf, ok := ret.Get(0).(func() gosdk.CryptoSuite); ok {
 		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(gohfc.CryptoSuite)
+			r0 = ret.Get(0).(gosdk.CryptoSuite)
 		}
 	}
 

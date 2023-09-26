@@ -2,7 +2,7 @@
 Copyright: peerfintech. All Rights Reserved.
 */
 
-package gohfc
+package gosdk
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hw09234/gohfc/pkg/testpb"
+	"github.com/hw09234/gosdk/pkg/testpb"
 
 	"github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/stretchr/testify/assert"

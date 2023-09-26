@@ -1,4 +1,4 @@
-package gohfc
+package gosdk
 
 import (
 	"github.com/golang/protobuf/proto"

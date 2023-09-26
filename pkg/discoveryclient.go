@@ -1,4 +1,4 @@
-package gohfc
+package gosdk
 
 import (
 	"github.com/hyperledger/fabric-protos-go/discovery"
@@ -31,7 +31,7 @@ func (d *DiscoveryClientImpl) DiscoveryPeers(channel string) ([]ChannelPeer, err
 }
 
 // DiscoveryChannelPeers 发现通道中所有的peer
-// 返回结构体为gohfc定义的结构体，gohfc获取discovery服务返回结果后进行了解析构造
+// 返回结构体为gosdk定义的结构体，gosdk获取discovery服务返回结果后进行了解析构造
 func (d *DiscoveryClientImpl) DiscoveryChannelPeers(channel string) ([]ChannelPeer, error) {
 	logger.Debug("enter discover channel peers progress")
 	defer logger.Debug("exit discover channel peers progress")

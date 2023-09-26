@@ -2,7 +2,7 @@
 Copyright: peerfintech. All Rights Reserved.
 */
 
-package gohfc
+package gosdk
 
 import (
 	"sort"

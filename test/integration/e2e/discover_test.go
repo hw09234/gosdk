@@ -6,11 +6,11 @@ import (
 	"testing"
 	"time"
 
-	gohfc "github.com/hw09234/gohfc/pkg"
+	gosdk "github.com/hw09234/gosdk/pkg"
 	"github.com/stretchr/testify/assert"
 )
 
-func newDiscoveryConfig(t *testing.T, version string) gohfc.DiscoveryConfig {
+func newDiscoveryConfig(t *testing.T, version string) gosdk.DiscoveryConfig {
 	var cryptoPath string
 
 	if version == "v2" {
@@ -28,13 +28,13 @@ func newDiscoveryConfig(t *testing.T, version string) gohfc.DiscoveryConfig {
 	key, err := ioutil.ReadFile(fmt.Sprintf("../../fixtures/%s/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/priv_sk", cryptoPath))
 	assert.Nil(t, err, "read key failed")
 
-	config := gohfc.DiscoveryConfig{
-		CryptoConfig: gohfc.CryptoConfig{
+	config := gosdk.DiscoveryConfig{
+		CryptoConfig: gosdk.CryptoConfig{
 			Family:    "ecdsa",
 			Algorithm: "P256-SHA256",
 			Hash:      "SHA2-256",
 		},
-		PeerConfigs: []gohfc.PeerConfig{
+		PeerConfigs: []gosdk.PeerConfig{
 			{
 				Name:             "peer0.org1.example.com",
 				Host:             "localhost:7051",
@@ -45,12 +45,12 @@ func newDiscoveryConfig(t *testing.T, version string) gohfc.DiscoveryConfig {
 				KeepaliveTimeout: 3 * time.Second,
 				DomainName:       "peer0.org1.example.com",
 				TlsMutual:        false,
-				TlsConfig: gohfc.TlsConfig{
+				TlsConfig: gosdk.TlsConfig{
 					ServerCert: peerCACert,
 				},
 			},
 		},
-		UserConfig: gohfc.UserConfig{
+		UserConfig: gosdk.UserConfig{
 			MspID: "Org1MSP",
 			Cert:  identity,
 			Key:   key,
@@ -60,7 +60,7 @@ func newDiscoveryConfig(t *testing.T, version string) gohfc.DiscoveryConfig {
 	return config
 }
 
-func newDiscoveryConfigGM(t *testing.T, version string) gohfc.DiscoveryConfig {
+func newDiscoveryConfigGM(t *testing.T, version string) gosdk.DiscoveryConfig {
 	var cryptoPath string
 
 	if version == "v2" {
@@ -78,9 +78,9 @@ func newDiscoveryConfigGM(t *testing.T, version string) gohfc.DiscoveryConfig {
 	key, err := ioutil.ReadFile(fmt.Sprintf("../../fixtures/%s/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/priv_sk", cryptoPath))
 	assert.Nil(t, err, "read key failed")
 
-	config := gohfc.DiscoveryConfig{
+	config := gosdk.DiscoveryConfig{
 		CryptoConfig: gmCryptoConfig,
-		PeerConfigs: []gohfc.PeerConfig{
+		PeerConfigs: []gosdk.PeerConfig{
 			{
 				Name:             "peer0.org1.example.com",
 				Host:             "localhost:7051",
@@ -91,12 +91,12 @@ func newDiscoveryConfigGM(t *testing.T, version string) gohfc.DiscoveryConfig {
 				KeepaliveTimeout: 3 * time.Second,
 				DomainName:       "peer0.org1.example.com",
 				TlsMutual:        false,
-				TlsConfig: gohfc.TlsConfig{
+				TlsConfig: gosdk.TlsConfig{
 					ServerCert: peerCACert,
 				},
 			},
 		},
-		UserConfig: gohfc.UserConfig{
+		UserConfig: gosdk.UserConfig{
 			MspID: "Org1MSP",
 			Cert:  identity,
 			Key:   key,

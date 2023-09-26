@@ -1,4 +1,4 @@
-module github.com/PeerFintech/gohfc/test/fixtures/chaincode
+module github.com/PeerFintech/gosdk/test/fixtures/chaincode
 
 go 1.14
 

@@ -6,13 +6,13 @@ import (
 	common "github.com/hyperledger/fabric-protos-go/common"
 	discovery "github.com/hyperledger/fabric-protos-go/discovery"
 
-	gohfc "github.com/hw09234/gohfc/pkg"
+	gosdk "github.com/hw09234/gosdk/pkg"
 
 	mock "github.com/stretchr/testify/mock"
 
 	orderer "github.com/hyperledger/fabric-protos-go/orderer"
 
-	parseBlock "github.com/hw09234/gohfc/pkg/parseBlock"
+	parseBlock "github.com/hw09234/gosdk/pkg/parseBlock"
 
 	peer "github.com/hyperledger/fabric-protos-go/peer"
 )
@@ -23,11 +23,11 @@ type FabricClient struct {
 }
 
 // AddUser provides a mock function with given fields: userName, userConfig
-func (_m *FabricClient) AddUser(userName string, userConfig gohfc.UserConfig) error {
+func (_m *FabricClient) AddUser(userName string, userConfig gosdk.UserConfig) error {
 	ret := _m.Called(userName, userConfig)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(string, gohfc.UserConfig) error); ok {
+	if rf, ok := ret.Get(0).(func(string, gosdk.UserConfig) error); ok {
 		r0 = rf(userName, userConfig)
 	} else {
 		r0 = ret.Error(0)
@@ -74,15 +74,15 @@ func (_m *FabricClient) DiscoveryChannelConfig(channel string) (*discovery.Confi
 }
 
 // DiscoveryChannelPeers provides a mock function with given fields: channel
-func (_m *FabricClient) DiscoveryChannelPeers(channel string) ([]gohfc.ChannelPeer, error) {
+func (_m *FabricClient) DiscoveryChannelPeers(channel string) ([]gosdk.ChannelPeer, error) {
 	ret := _m.Called(channel)
 
-	var r0 []gohfc.ChannelPeer
-	if rf, ok := ret.Get(0).(func(string) []gohfc.ChannelPeer); ok {
+	var r0 []gosdk.ChannelPeer
+	if rf, ok := ret.Get(0).(func(string) []gosdk.ChannelPeer); ok {
 		r0 = rf(channel)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]gohfc.ChannelPeer)
+			r0 = ret.Get(0).([]gosdk.ChannelPeer)
 		}
 	}
 
@@ -97,15 +97,15 @@ func (_m *FabricClient) DiscoveryChannelPeers(channel string) ([]gohfc.ChannelPe
 }
 
 // DiscoveryEndorsePolicy provides a mock function with given fields: channel, chaincodes, collections
-func (_m *FabricClient) DiscoveryEndorsePolicy(channel string, chaincodes []string, collections map[string]string) ([]gohfc.EndorsermentDescriptor, error) {
+func (_m *FabricClient) DiscoveryEndorsePolicy(channel string, chaincodes []string, collections map[string]string) ([]gosdk.EndorsermentDescriptor, error) {
 	ret := _m.Called(channel, chaincodes, collections)
 
-	var r0 []gohfc.EndorsermentDescriptor
-	if rf, ok := ret.Get(0).(func(string, []string, map[string]string) []gohfc.EndorsermentDescriptor); ok {
+	var r0 []gosdk.EndorsermentDescriptor
+	if rf, ok := ret.Get(0).(func(string, []string, map[string]string) []gosdk.EndorsermentDescriptor); ok {
 		r0 = rf(channel, chaincodes, collections)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]gohfc.EndorsermentDescriptor)
+			r0 = ret.Get(0).([]gosdk.EndorsermentDescriptor)
 		}
 	}
 
@@ -120,15 +120,15 @@ func (_m *FabricClient) DiscoveryEndorsePolicy(channel string, chaincodes []stri
 }
 
 // DiscoveryLocalPeers provides a mock function with given fields:
-func (_m *FabricClient) DiscoveryLocalPeers() ([]gohfc.LocalPeer, error) {
+func (_m *FabricClient) DiscoveryLocalPeers() ([]gosdk.LocalPeer, error) {
 	ret := _m.Called()
 
-	var r0 []gohfc.LocalPeer
-	if rf, ok := ret.Get(0).(func() []gohfc.LocalPeer); ok {
+	var r0 []gosdk.LocalPeer
+	if rf, ok := ret.Get(0).(func() []gosdk.LocalPeer); ok {
 		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]gohfc.LocalPeer)
+			r0 = ret.Get(0).([]gosdk.LocalPeer)
 		}
 	}
 
@@ -210,15 +210,15 @@ func (_m *FabricClient) GetBlockHeight(channelName string) (uint64, error) {
 }
 
 // GetCrypto provides a mock function with given fields:
-func (_m *FabricClient) GetCrypto() (gohfc.CryptoSuite, error) {
+func (_m *FabricClient) GetCrypto() (gosdk.CryptoSuite, error) {
 	ret := _m.Called()
 
-	var r0 gohfc.CryptoSuite
-	if rf, ok := ret.Get(0).(func() gohfc.CryptoSuite); ok {
+	var r0 gosdk.CryptoSuite
+	if rf, ok := ret.Get(0).(func() gosdk.CryptoSuite); ok {
 		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(gohfc.CryptoSuite)
+			r0 = ret.Get(0).(gosdk.CryptoSuite)
 		}
 	}
 
@@ -279,11 +279,11 @@ func (_m *FabricClient) GetTransactionByTxID(channelName string, txID string) (*
 }
 
 // InstallChainCode provides a mock function with given fields: peerName, req
-func (_m *FabricClient) InstallChainCode(peerName string, req *gohfc.InstallRequest) (*peer.ProposalResponse, error) {
+func (_m *FabricClient) InstallChainCode(peerName string, req *gosdk.InstallRequest) (*peer.ProposalResponse, error) {
 	ret := _m.Called(peerName, req)
 
 	var r0 *peer.ProposalResponse
-	if rf, ok := ret.Get(0).(func(string, *gohfc.InstallRequest) *peer.ProposalResponse); ok {
+	if rf, ok := ret.Get(0).(func(string, *gosdk.InstallRequest) *peer.ProposalResponse); ok {
 		r0 = rf(peerName, req)
 	} else {
 		if ret.Get(0) != nil {
@@ -292,7 +292,7 @@ func (_m *FabricClient) InstallChainCode(peerName string, req *gohfc.InstallRequ
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(string, *gohfc.InstallRequest) error); ok {
+	if rf, ok := ret.Get(1).(func(string, *gosdk.InstallRequest) error); ok {
 		r1 = rf(peerName, req)
 	} else {
 		r1 = ret.Error(1)
@@ -302,11 +302,11 @@ func (_m *FabricClient) InstallChainCode(peerName string, req *gohfc.InstallRequ
 }
 
 // InstantiateChainCode provides a mock function with given fields: policy, req
-func (_m *FabricClient) InstantiateChainCode(policy string, req *gohfc.ChainCode) (*orderer.BroadcastResponse, error) {
+func (_m *FabricClient) InstantiateChainCode(policy string, req *gosdk.ChainCode) (*orderer.BroadcastResponse, error) {
 	ret := _m.Called(policy, req)
 
 	var r0 *orderer.BroadcastResponse
-	if rf, ok := ret.Get(0).(func(string, *gohfc.ChainCode) *orderer.BroadcastResponse); ok {
+	if rf, ok := ret.Get(0).(func(string, *gosdk.ChainCode) *orderer.BroadcastResponse); ok {
 		r0 = rf(policy, req)
 	} else {
 		if ret.Get(0) != nil {
@@ -315,7 +315,7 @@ func (_m *FabricClient) InstantiateChainCode(policy string, req *gohfc.ChainCode
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(string, *gohfc.ChainCode) error); ok {
+	if rf, ok := ret.Get(1).(func(string, *gosdk.ChainCode) error); ok {
 		r1 = rf(policy, req)
 	} else {
 		r1 = ret.Error(1)
@@ -325,15 +325,15 @@ func (_m *FabricClient) InstantiateChainCode(policy string, req *gohfc.ChainCode
 }
 
 // Invoke provides a mock function with given fields: args, transientMap, cName, ccName, userName
-func (_m *FabricClient) Invoke(args []string, transientMap map[string][]byte, cName string, ccName string, userName string) (*gohfc.InvokeResponse, error) {
+func (_m *FabricClient) Invoke(args []string, transientMap map[string][]byte, cName string, ccName string, userName string) (*gosdk.InvokeResponse, error) {
 	ret := _m.Called(args, transientMap, cName, ccName, userName)
 
-	var r0 *gohfc.InvokeResponse
-	if rf, ok := ret.Get(0).(func([]string, map[string][]byte, string, string, string) *gohfc.InvokeResponse); ok {
+	var r0 *gosdk.InvokeResponse
+	if rf, ok := ret.Get(0).(func([]string, map[string][]byte, string, string, string) *gosdk.InvokeResponse); ok {
 		r0 = rf(args, transientMap, cName, ccName, userName)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*gohfc.InvokeResponse)
+			r0 = ret.Get(0).(*gosdk.InvokeResponse)
 		}
 	}
 
@@ -371,11 +371,11 @@ func (_m *FabricClient) JoinChannel(channelId string, peerName string) (*peer.Pr
 }
 
 // ListenEventFilterBlock provides a mock function with given fields: channelName, startNum, filterBlockCh
-func (_m *FabricClient) ListenEventFilterBlock(channelName string, startNum uint64, filterBlockCh chan gohfc.FilteredBlockResponse) chan error {
+func (_m *FabricClient) ListenEventFilterBlock(channelName string, startNum uint64, filterBlockCh chan gosdk.FilteredBlockResponse) chan error {
 	ret := _m.Called(channelName, startNum, filterBlockCh)
 
 	var r0 chan error
-	if rf, ok := ret.Get(0).(func(string, uint64, chan gohfc.FilteredBlockResponse) chan error); ok {
+	if rf, ok := ret.Get(0).(func(string, uint64, chan gosdk.FilteredBlockResponse) chan error); ok {
 		r0 = rf(channelName, startNum, filterBlockCh)
 	} else {
 		if ret.Get(0) != nil {

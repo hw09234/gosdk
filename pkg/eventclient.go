@@ -2,14 +2,14 @@
 Copyright: peerfintech. All Rights Reserved.
 */
 
-package gohfc
+package gosdk
 
 import (
 	"math"
 	"sync/atomic"
 	"time"
 
-	pBlock "github.com/hw09234/gohfc/pkg/parseBlock"
+	pBlock "github.com/hw09234/gosdk/pkg/parseBlock"
 	"github.com/pkg/errors"
 )
 

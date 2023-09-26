@@ -1,4 +1,4 @@
-module github.com/hw09234/gohfc
+module github.com/hw09234/gosdk
 
 go 1.17
 

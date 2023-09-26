@@ -2,12 +2,12 @@
 Copyright: peerfintech. All Rights Reserved.
 */
 
-package gohfc
+package gosdk
 
 import (
 	"time"
 
-	"github.com/hw09234/gohfc/pkg/syncTxStatus"
+	"github.com/hw09234/gosdk/pkg/syncTxStatus"
 	"github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/pkg/errors"
 )

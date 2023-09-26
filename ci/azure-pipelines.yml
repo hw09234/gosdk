@@ -20,7 +20,7 @@ jobs:
     steps:
       - template: install_deps.yml
       - checkout: self
-        path: 'go/src/github.com/PeerFintech/gohfc'
+        path: 'go/src/github.com/PeerFintech/gosdk'
         displayName: Checkout Code
 #
 #     - script: ./scripts/golinter.sh
