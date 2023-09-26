@@ -1,0 +1,156 @@
+# Copyright the peerfintech. All rights reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+name: $(SourceBranchName)-$(Date:yyyyMMdd)$(Rev:.rrr)
+trigger: none
+pr:
+  - master
+  - release-1.4
+
+variables:
+  GOPATH: $(Agent.BuildDirectory)/go
+  PATH: $(Agent.BuildDirectory)/go/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+  GOVER: 1.14.1
+
+jobs:
+  - job: VerifyBuild
+    pool:
+      vmImage: ubuntu-18.04
+    steps:
+      - template: install_deps.yml
+      - checkout: self
+        path: 'go/src/github.com/PeerFintech/gohfc'
+        displayName: Checkout Code
+#
+#     - script: ./scripts/golinter.sh
+#       displayName: Run Basic Checks
+#
+#     - script: make unit-test
+#       displayName: Run tests
+#
+#  - job: integrationTest
+#    displayName: integrationTest for fabric
+#    dependsOn: VerifyBuild
+#    strategy:
+#      matrix:
+#        FABRIC_NONGM:
+#          CHANNELARTIFACTSPATH: 'channel-artifacts'
+#          CRYPTOCONFIGPATH: 'crypto-config'
+#          IMAGE_COMPANY: 'hyperledger'
+#          IMAGE_TAG: '1.4.9'
+#        #FABRIC_GM:
+#        #  CHANNELARTIFACTSPATH: 'gm-channel-artifacts'
+#        #  CRYPTOCONFIGPATH: 'gm-crypto-config'
+#        #  IMAGE_COMPANY: 'peersafes'
+#        #  IMAGE_TAG: '1.4.9'
+#    steps:
+#      - script: |
+#          docker pull $IMAGE_COMPANY/fabric-peer:$IMAGE_TAG
+#          docker pull $IMAGE_COMPANY/fabric-orderer:$IMAGE_TAG
+#          docker pull $IMAGE_COMPANY/fabric-ccenv:$IMAGE_TAG
+#          docker pull $IMAGE_COMPANY/fabric-baseos:0.4.21
+#          docker tag $IMAGE_COMPANY/fabric-baseos:0.4.21 hyperledger/fabric-baseos:$IMAGE_TAG
+#        displayName: docker pull fabric
+#
+#      - script: git config --global url."https://gitlab-ci-token:np7NyxnnzQEH-bQZAxS5@gitlab.peersafe.cn:4430/".insteadOf "https://gitlab.peersafe.cn/"
+#        displayName: Set Gitlab
+#
+#      - script: make integration-test
+#        displayName: Run integration test for non gm fabric
+#
+#  - job: integrationTestV2
+#    displayName: integrationTest for fabric v2.2
+#    dependsOn: VerifyBuild
+#    strategy:
+#      matrix:
+#        FABRIC_NONGM:
+#          CHANNELARTIFACTSPATH: 'channel-artifactsV2'
+#          CRYPTOCONFIGPATH: 'crypto-configV2'
+#          IMAGE_COMPANY: 'hyperledger'
+#          IMAGE_TAG: '2.2.3'
+#        #FABRIC_GM:
+#        #  CHANNELARTIFACTSPATH: 'gm-channel-artifacts'
+#        #  CRYPTOCONFIGPATH: 'gm-crypto-config'
+#        #  IMAGE_COMPANY: 'peersafes'
+#        #  IMAGE_TAG: '1.4.9'
+#    steps:
+#      - script: |
+#          docker pull $IMAGE_COMPANY/fabric-peer:$IMAGE_TAG
+#          docker pull $IMAGE_COMPANY/fabric-orderer:$IMAGE_TAG
+#          docker pull $IMAGE_COMPANY/fabric-ccenv:$IMAGE_TAG
+#          docker pull $IMAGE_COMPANY/fabric-baseos:0.4.21
+#          docker tag $IMAGE_COMPANY/fabric-baseos:0.4.21 hyperledger/fabric-baseos:$IMAGE_TAG
+#        displayName: docker pull fabric
+#
+#      - script: git config --global url."https://gitlab-ci-token:np7NyxnnzQEH-bQZAxS5@gitlab.peersafe.cn:4430/".insteadOf "https://gitlab.peersafe.cn/"
+#        displayName: Set Gitlab
+#
+#      - script: make integration-test-v2
+#        displayName: Run integration test for non gm fabric
+#
+#  - job: integrationGMTest
+#    displayName: integrationTest for GM fabric
+#    dependsOn:
+#      - VerifyBuild
+#      - integrationTest
+#    strategy:
+#      matrix:
+#        FABRIC_GM:
+#          CHANNELARTIFACTSPATH: 'gm-channel-artifacts'
+#          CRYPTOCONFIGPATH: 'gm-crypto-config'
+#          IMAGE_COMPANY: 'peersafes'
+#          IMAGE_TAG: '1.4.3-GM-newtls'
+#    steps:
+#      - script: |
+#          docker pull $IMAGE_COMPANY/fabric-peer:$IMAGE_TAG
+#          docker pull $IMAGE_COMPANY/fabric-orderer:$IMAGE_TAG
+#          docker pull $IMAGE_COMPANY/fabric-ccenv:$IMAGE_TAG
+#          docker pull $IMAGE_COMPANY/fabric-baseos:$IMAGE_TAG
+#        displayName: docker pull GM fabric from peersafes
+#
+#      - script: git config --global url."https://gitlab-ci-token:np7NyxnnzQEH-bQZAxS5@gitlab.peersafe.cn:4430/".insteadOf "https://gitlab.peersafe.cn/"
+#        displayName: Set Gitlab
+#
+#      - script: make integration-gm-test
+#        displayName: Run integration test for gm fabric
+#
+#  - job: integrationGMTestV2
+#    displayName: integrationTest for GM fabric v2.2
+#    dependsOn:
+#      - VerifyBuild
+#      - integrationTest
+#    strategy:
+#      matrix:
+#        FABRIC_GM:
+#          CHANNELARTIFACTSPATH: 'gm-channel-artifactsV2'
+#          CRYPTOCONFIGPATH: 'gm-crypto-configV2'
+#          IMAGE_COMPANY: 'peersafes'
+#          IMAGE_TAG: '2.2.1-GM'
+#    steps:
+#      - script: |
+#          docker pull $IMAGE_COMPANY/fabric-peer:$IMAGE_TAG
+#          docker pull $IMAGE_COMPANY/fabric-orderer:$IMAGE_TAG
+#          docker pull $IMAGE_COMPANY/fabric-ccenv:$IMAGE_TAG
+#          docker pull $IMAGE_COMPANY/fabric-baseos:$IMAGE_TAG
+#        displayName: docker pull GM fabric from peersafes
+#
+#      - script: git config --global url."https://gitlab-ci-token:np7NyxnnzQEH-bQZAxS5@gitlab.peersafe.cn:4430/".insteadOf "https://gitlab.peersafe.cn/"
+#        displayName: Set Gitlab
+#
+#      - script: make integration-gm-test-v2
+#        displayName: Run integration test for gm fabric
+
+#  - job: IntegrationTest
+#    pool:
+#      vmImage: ubuntu-18.04
+#    dependsOn: []
+#    timeoutInMinutes: 60
+#    steps:
+#      - template: install_deps.yml
+#      - checkout: self
+#      - script: make integration-test
+#        displayName: Run integration test
+#        env:
+#          # TODO: update this variable name in the Makefile
+#          JENKINS_URL: true

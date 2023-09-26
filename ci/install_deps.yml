@@ -1,0 +1,26 @@
+# Copyright the peerfintech. All rights reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+steps:
+  #- script: echo "127.0.0.1 peer0.org1.example.com" | sudo tee -a /etc/hosts
+  #  displayName: Echo hosts
+  #    sudo apt-get clean
+  #    sudo apt-get update
+  #    sudo apt-get install -y libtool gcc make
+  #    echo "vsts  hard  nofile  65535" | sudo tee -a /etc/security/limits.conf
+  #    echo "vsts  soft  nofile  65535" | sudo tee -a /etc/security/limits.conf
+  #  displayName: Install Dependencies
+  - script: sudo apt-get clean
+    displayName: Run apt clean
+  - script: sudo apt-get update
+    displayName: Run apt update
+  - script: sudo apt-get install -y gcc haveged libtool make
+    displayName: Install dependencies
+  - script: git config --global url."https://gitlab-ci-token:np7NyxnnzQEH-bQZAxS5@gitlab.peersafe.cn:4430/".insteadOf "https://gitlab.peersafe.cn/"
+    displayName: Set Gitlab
+  - task: GoTool@0
+    inputs:
+      version: $(GOVER)
+      goPath:  $(GOPATH)
+    displayName: Install GoLang

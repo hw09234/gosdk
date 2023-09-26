@@ -1,0 +1,63 @@
+---
+Crypto:
+  Family: ecdsa
+  Algorithm: P256-SHA256
+  Hash: SHA2-256
+Orderers:
+  orderer0:     
+    Name: orderer.example.com
+    Host: localhost:7050
+    DomainName: orderer.example.com
+    UseTLS: true
+    TlsMutual: false
+    Timeout: 180s
+    KeepaliveTime: 60s
+    KeepaliveTimeout: 30s
+    TlsConfig:
+      ServercertPath: ../../fixtures/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/tls/ca.crt
+Peers:
+  peer01:       
+    Name: peer0.org1.example.com
+    Host: localhost:7051
+    DomainName: peer0.org1.example.com
+    OrgName: org1
+    UseTLS: true
+    TlsMutual: false
+    Timeout: 180s
+    InstantiateTimeout: 180s
+    KeepaliveTime: 60s
+    KeepaliveTimeout: 30s
+    TlsConfig:
+      ServercertPath: ../../fixtures/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/tls/ca.crt
+EventPeers:
+  - Name: peer0.org1.example.com
+    Host: localhost:7051
+    DomainName: peer0.org1.example.com
+    OrgName: org1
+    UseTLS: true
+    TlsMutual: false
+    Timeout: 180s
+    InstantiateTimeout: 180s
+    KeepaliveTime: 60s
+    KeepaliveTimeout: 30s
+    TlsConfig:
+      ServercertPath: ../../fixtures/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/tls/ca.crt
+Users:
+  admin:
+    CertPath: ../../fixtures/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem
+    KeyPath: ../../fixtures/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/priv_sk
+    MspID: Org1MSP
+  user:
+    CertPath: ../../fixtures/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/User1@org1.example.com-cert.pem
+    KeyPath: ../../fixtures/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/priv_sk
+    MspID: Org1MSP
+Channels:
+    - ChannelId: mychannel
+      ChaincodeName: mycc
+      ChaincodeVersion: 1.0
+      ChaincodeType: 1
+      ChaincodePolicy:
+        Orgs:
+          - org1
+          - org2
+        Rule: or
